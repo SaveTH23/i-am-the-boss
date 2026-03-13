@@ -2,439 +2,573 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🐱💣 แมวระเบิด Online</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>I'm The Boss · อย่าซ่ากับบอส</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+Thai:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #1a0a2e; --bg2: #240e3f; --bg3: #2e1350;
-  --card: #1f0d38; --border: #4a2070;
-  --pink: #ff4da6; --yellow: #ffd93d; --orange: #ff8c42;
-  --green: #6bcb77; --red: #ff4444; --blue: #4d9fff;
-  --purple: #b44fff; --teal: #4dffd6;
-  --text: #f0e8ff; --muted: #8060a0;
+:root{
+  --ink:#0a0a0f; --paper:#f5f0e8; --cream:#ede7d3; --aged:#d4c9a8;
+  --gold:#c8961a; --gold2:#f0b830; --gold3:#ffd060;
+  --red:#c0392b; --blue:#1a4a8c; --green:#1a6b3a; --yellow:#c8960a; --purple:#5a1a8c; --orange:#c05a1a;
+  --cr:#c0392b; --cb:#1a4a8c; --cg:#1a6b3a; --cy:#c8960a; --cp:#5a1a8c; --co:#c05a1a;
+  --dark:#1a1208; --border:#8a7a50;
+  --shadow: 0 4px 20px rgba(0,0,0,.35);
 }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  background: var(--bg);
-  background-image: radial-gradient(ellipse at 20% 20%, #2d0a50 0%, transparent 60%),
-                    radial-gradient(ellipse at 80% 80%, #0a1a40 0%, transparent 60%);
-  color: var(--text); font-family: 'Sarabun', sans-serif;
-  min-height: 100vh; overflow-x: hidden;
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background: var(--ink);
+  background-image:
+    radial-gradient(ellipse at 10% 10%, #1a1000 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 90%, #0a0a18 0%, transparent 50%);
+  font-family:'Noto Sans Thai',sans-serif;
+  color:var(--paper);
+  min-height:100vh;
+  overflow-x:hidden;
 }
-/* Floating paw prints */
-body::before { content: '🐾🐾🐾🐾🐾🐾🐾🐾🐾🐾'; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  font-size: 2rem; line-height: 4; word-break: break-all; opacity: .04; pointer-events: none; z-index: 0; letter-spacing: 3rem; }
+/* Texture overlay */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:0; opacity:.6;
+}
+#app{position:relative;z-index:1;max-width:1140px;margin:0 auto;padding:14px;}
 
-#app { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 12px; }
+/* ── Header ── */
+.hdr{text-align:center;padding:22px 0 14px;}
+.hdr h1{
+  font-family:'Bebas Neue',cursive;
+  font-size:clamp(3.2rem,10vw,7rem);
+  letter-spacing:10px;
+  background:linear-gradient(180deg,var(--gold3) 0%,var(--gold2) 40%,var(--gold) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 2px 8px rgba(200,150,26,.4));
+  line-height:1;
+}
+.hdr-sub{font-size:.7rem;letter-spacing:5px;text-transform:uppercase;color:var(--gold);opacity:.7;margin-top:4px;}
+.hdr-line{width:200px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:8px auto 0;}
 
-/* Title */
-.game-title { text-align: center; padding: 16px 0 10px; }
-.game-title h1 { font-family: 'Fredoka One', cursive; font-size: clamp(2.4rem, 8vw, 5rem);
-  background: linear-gradient(135deg, #ff4da6, #ffd93d, #ff8c42, #ff4da6);
-  background-size: 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  animation: titleShine 4s infinite; filter: drop-shadow(0 0 20px rgba(255,77,166,.4)); }
-@keyframes titleShine { 0%,100% { background-position:0% } 50% { background-position:100% } }
-.game-title p { color: var(--muted); font-size: .75rem; letter-spacing: 3px; text-transform: uppercase; margin-top: 4px; }
+/* ── Screens ── */
+.screen{display:none;}.screen.active{display:block;animation:fadeUp .3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
-/* Screen system */
-.screen { display: none; }
-.screen.active { display: block; animation: fadeUp .35s ease; }
-@keyframes fadeUp { from { opacity:0; transform:translateY(14px) } to { opacity:1; transform:none } }
+/* ── Paper panels ── */
+.panel{
+  background:linear-gradient(145deg,#1e1608,#140e05);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:18px;margin-bottom:12px;
+  box-shadow:var(--shadow), inset 0 1px 0 rgba(255,220,100,.08);
+  position:relative;
+}
+.panel::before{
+  content:'';position:absolute;inset:2px;
+  border:1px solid rgba(200,150,26,.12);border-radius:3px;pointer-events:none;
+}
+.ptitle{
+  font-family:'Bebas Neue',cursive;font-size:1.1rem;letter-spacing:3px;
+  color:var(--gold2);margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.ptitle::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
 
-/* Cards / panels */
-.panel { background: rgba(36,14,63,.85); border: 1px solid var(--border);
-  border-radius: 16px; padding: 18px; margin-bottom: 12px; backdrop-filter: blur(8px); }
-.panel-title { font-family: 'Fredoka One', cursive; font-size: .95rem; color: var(--yellow); letter-spacing: 1px; margin-bottom: 14px;
-  display: flex; align-items: center; gap: 7px; }
-.panel-title::before { content: ''; width: 4px; height: 16px; background: var(--pink); border-radius: 3px; }
+/* ── Buttons ── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:11px 22px;border-radius:3px;border:none;cursor:pointer;
+  font-family:'Noto Sans Thai',sans-serif;font-size:.9rem;font-weight:700;
+  transition:all .18s;white-space:nowrap;letter-spacing:.5px;
+}
+.btn:disabled{opacity:.3;cursor:not-allowed;transform:none!important;}
+.btn-gold{
+  background:linear-gradient(135deg,var(--gold2),var(--gold));
+  color:var(--dark);border:1px solid var(--gold3);
+  box-shadow:0 3px 14px rgba(200,150,26,.4),inset 0 1px 0 rgba(255,255,200,.2);
+}
+.btn-gold:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 20px rgba(200,150,26,.5);}
+.btn-out{background:transparent;border:1px solid var(--border);color:var(--paper);}
+.btn-out:hover:not(:disabled){border-color:var(--gold2);color:var(--gold2);}
+.btn-green{background:rgba(26,107,58,.2);border:1px solid var(--green);color:#4cdb7c;}
+.btn-red{background:rgba(192,57,43,.15);border:1px solid var(--red);color:#ff7060;}
+.btn-blue{background:rgba(26,74,140,.2);border:1px solid var(--blue);color:#60a0ff;}
+.btn-sm{padding:7px 14px;font-size:.8rem;}
+.btn-xs{padding:5px 10px;font-size:.72rem;}
+.brow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
 
-/* Buttons */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  padding: 11px 22px; border-radius: 12px; border: none; cursor: pointer;
-  font-family: 'Sarabun', sans-serif; font-size: .9rem; font-weight: 700; transition: all .18s; white-space: nowrap; }
-.btn:disabled { opacity: .35; cursor: not-allowed; transform: none !important; }
-.btn-pink { background: linear-gradient(135deg, var(--pink), #cc2288); color: #fff;
-  box-shadow: 0 4px 18px rgba(255,77,166,.3); }
-.btn-pink:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,77,166,.5); }
-.btn-yellow { background: linear-gradient(135deg, var(--yellow), var(--orange)); color: #1a0a2e;
-  box-shadow: 0 4px 18px rgba(255,217,61,.3); }
-.btn-yellow:hover:not(:disabled) { transform: translateY(-2px); }
-.btn-out { background: transparent; border: 1.5px solid var(--border); color: var(--text); }
-.btn-out:hover:not(:disabled) { border-color: var(--pink); color: var(--pink); }
-.btn-green { background: rgba(107,203,119,.15); border: 1.5px solid var(--green); color: var(--green); }
-.btn-red { background: rgba(255,68,68,.12); border: 1.5px solid var(--red); color: var(--red); }
-.btn-sm { padding: 7px 14px; font-size: .8rem; border-radius: 9px; }
-.btn-xs { padding: 5px 10px; font-size: .73rem; border-radius: 7px; }
-.brow { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+/* ── Inputs ── */
+input[type=text],input[type=number]{
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  border-radius:3px;padding:10px 14px;color:var(--paper);
+  font-family:'Noto Sans Thai',sans-serif;font-size:.92rem;width:100%;
+  transition:border-color .18s;
+}
+input:focus{outline:none;border-color:var(--gold2);}
+label{display:block;font-size:.7rem;color:var(--aged);margin-bottom:4px;letter-spacing:.5px;text-transform:uppercase;}
+.field{margin-bottom:12px;}
 
-/* Inputs */
-input[type=text], input[type=number] { background: rgba(46,19,80,.7); border: 1.5px solid var(--border);
-  border-radius: 10px; padding: 10px 14px; color: var(--text); font-family: 'Sarabun',sans-serif;
-  font-size: .92rem; width: 100%; transition: border-color .18s; }
-input:focus { outline: none; border-color: var(--pink); }
-label { display: block; font-size: .72rem; color: var(--muted); margin-bottom: 4px; }
-.field { margin-bottom: 11px; }
+/* ── Room code ── */
+.rcode{
+  font-family:'Bebas Neue',cursive;font-size:3.5rem;letter-spacing:14px;
+  color:var(--gold2);text-align:center;padding:14px;
+  background:rgba(200,150,26,.05);border:1px dashed rgba(200,150,26,.3);
+  border-radius:3px;cursor:pointer;margin-bottom:8px;transition:all .18s;
+}
+.rcode:hover{background:rgba(200,150,26,.1);}
 
-/* Room code */
-.room-code { font-family: 'Fredoka One', cursive; font-size: 3.5rem; letter-spacing: 12px;
-  color: var(--yellow); text-align: center; padding: 14px;
-  background: rgba(255,217,61,.06); border-radius: 13px; border: 2px dashed rgba(255,217,61,.3);
-  cursor: pointer; margin-bottom: 8px; }
-.room-code:hover { background: rgba(255,217,61,.1); }
+/* ── Lobby player grid ── */
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
+@media(max-width:480px){.pgrid{grid-template-columns:repeat(2,1fr);}}
+.pslot{
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  border-radius:4px;padding:13px 9px;text-align:center;transition:all .22s;
+}
+.pslot.occ{border-color:#4cdb7c;background:rgba(76,219,124,.04);}
+.pslot.rdy{border-color:var(--gold2);background:rgba(240,184,48,.04);}
+.pav{width:44px;height:44px;border-radius:50%;margin:0 auto 7px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;border:2px solid;}
+.pname{font-size:.84rem;font-weight:700;}
+.psub{font-size:.68rem;color:var(--aged);margin-top:3px;}
 
-/* Player slots in lobby */
-.player-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 9px; }
-@media(max-width:480px) { .player-grid { grid-template-columns: repeat(2,1fr); } }
-.pslot { background: rgba(46,19,80,.5); border: 1.5px solid var(--border); border-radius: 13px;
-  padding: 12px 8px; text-align: center; transition: all .22s; }
-.pslot.occ { border-color: var(--green); background: rgba(107,203,119,.05); }
-.pslot.rdy { border-color: var(--yellow); background: rgba(255,217,61,.05); }
-.pslot-icon { font-size: 2rem; margin-bottom: 5px; }
-.pslot-name { font-size: .84rem; font-weight: 700; }
-.pslot-sub { font-size: .68rem; color: var(--muted); margin-top: 2px; }
+/* ── Color helpers ── */
+.c-red{color:var(--cr);} .c-blue{color:var(--cb);} .c-green{color:var(--cg);}
+.c-yellow{color:var(--cy);} .c-purple{color:var(--cp);} .c-orange{color:var(--co);}
+.bc-red{border-color:var(--cr)!important;} .bc-blue{border-color:var(--cb)!important;}
+.bc-green{border-color:var(--cg)!important;} .bc-yellow{border-color:var(--cy)!important;}
+.bc-purple{border-color:var(--cp)!important;} .bc-orange{border-color:var(--co)!important;}
+.bg-red{background:rgba(192,57,43,.15)!important;} .bg-blue{background:rgba(26,74,140,.15)!important;}
+.bg-green{background:rgba(26,107,58,.15)!important;} .bg-yellow{background:rgba(200,150,10,.15)!important;}
+.bg-purple{background:rgba(90,26,140,.15)!important;} .bg-orange{background:rgba(192,90,26,.15)!important;}
+.dot{width:11px;height:11px;border-radius:50%;display:inline-block;flex-shrink:0;}
+.dot-red{background:var(--cr);} .dot-blue{background:var(--cb);} .dot-green{background:var(--cg);}
+.dot-yellow{background:var(--cy);} .dot-purple{background:var(--cp);} .dot-orange{background:var(--co);}
 
-/* Game layout */
-.game-layout { display: grid; grid-template-columns: 1fr 240px; gap: 12px; }
-@media(max-width:700px) { .game-layout { grid-template-columns: 1fr; } }
+/* ── Board ── */
+.board-wrap{
+  background:linear-gradient(145deg,#0f2014,#0a1a0a);
+  border:2px solid rgba(200,150,26,.3);border-radius:5px;
+  padding:10px;margin-bottom:12px;
+  box-shadow:inset 0 0 40px rgba(0,0,0,.5);
+}
+.board-grid{
+  display:grid;grid-template-columns:repeat(10,1fr);
+  grid-template-rows:repeat(8,1fr);
+  gap:3px;aspect-ratio:10/8;
+}
+.bcell{
+  border-radius:3px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  font-size:.55rem;font-weight:700;text-align:center;
+  border:1px solid rgba(255,255,255,.06);
+  padding:2px;position:relative;min-height:0;
+  transition:box-shadow .18s;
+}
+.bcell.path-cell{background:rgba(255,255,255,.04);}
+.bcell.path-cell:hover{box-shadow:0 0 8px rgba(200,150,26,.3);}
+.bcell.center-cell{background:linear-gradient(145deg,#1a1200,#100c00);border:none;}
+.bcell.active-cell{box-shadow:0 0 0 2px var(--gold2)!important;background:rgba(240,184,48,.08)!important;}
 
-/* Deck area */
-.deck-area { display: flex; gap: 20px; align-items: center; justify-content: center; padding: 14px 0; }
-.deck-pile { width: 80px; height: 112px; border-radius: 11px; border: 2.5px solid; cursor: pointer;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  font-size: 1.8rem; position: relative; transition: transform .18s; font-family:'Fredoka One',cursive; font-size:1rem; }
-.deck-pile:hover { transform: translateY(-5px) scale(1.04); }
-.deck-back { background: linear-gradient(145deg,#2d1060,#1a0830); border-color: var(--purple); box-shadow: 0 6px 20px rgba(180,79,255,.3); }
-.deck-count { position: absolute; top: -8px; right: -8px; background: var(--pink); color: #fff;
-  width: 22px; height: 22px; border-radius: 50%; font-size: .7rem; font-weight: 800;
-  display: flex; align-items: center; justify-content: center; font-family:'Sarabun',sans-serif; }
-.discard-pile { background: linear-gradient(145deg,#1a1a40,#0d0d2a); border-color: var(--muted); }
+/* Cell color themes */
+.cc-red{background:rgba(192,57,43,.18)!important;border-color:rgba(192,57,43,.3)!important;}
+.cc-blue{background:rgba(26,74,140,.18)!important;border-color:rgba(26,74,140,.3)!important;}
+.cc-green{background:rgba(26,107,58,.18)!important;border-color:rgba(26,107,58,.3)!important;}
+.cc-yellow{background:rgba(200,150,10,.18)!important;border-color:rgba(200,150,10,.3)!important;}
+.cc-purple{background:rgba(90,26,140,.18)!important;border-color:rgba(90,26,140,.3)!important;}
+.cc-orange{background:rgba(192,90,26,.18)!important;border-color:rgba(192,90,26,.3)!important;}
+.cc-draw{background:rgba(60,100,180,.12)!important;border-color:rgba(60,100,180,.25)!important;}
+.cc-wild{background:rgba(200,150,26,.12)!important;border-color:rgba(200,150,26,.25)!important;}
+.cell-lbl{font-size:.52rem;line-height:1.1;color:rgba(255,255,255,.6);}
+.pawn{width:8px;height:8px;border-radius:50%;border:1.5px solid rgba(0,0,0,.4);display:inline-block;margin:1px;}
 
-/* Playing cards */
-.hand-area { display: flex; flex-wrap: wrap; gap: 7px; padding: 6px 0; min-height: 100px; }
-.play-card { width: 68px; height: 100px; border-radius: 11px; border: 2.5px solid; cursor: pointer;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  transition: all .18s; padding: 5px; text-align: center; position: relative; font-family:'Sarabun',sans-serif; }
-.play-card:hover { transform: translateY(-10px) scale(1.05); z-index: 10; }
-.play-card.selected { transform: translateY(-16px) scale(1.08); z-index: 20; box-shadow: 0 14px 30px rgba(255,77,166,.6); }
-.play-card.disabled { opacity: .3; cursor: not-allowed; transform: none !important; }
-.card-icon { font-size: 1.6rem; }
-.card-name { font-size: .55rem; font-weight: 700; margin-top: 2px; line-height: 1.2; }
+/* ── Game layout ── */
+.glayout{display:grid;grid-template-columns:1fr 260px;gap:12px;}
+@media(max-width:720px){.glayout{grid-template-columns:1fr;}}
 
-/* Card types colors */
-.ct-exploding { background: linear-gradient(145deg,#3d0010,#200008); border-color: #ff2244; }
-.ct-defuse { background: linear-gradient(145deg,#003d1a,#001a0d); border-color: var(--green); }
-.ct-skip { background: linear-gradient(145deg,#1a1a00,#0d0d00); border-color: var(--yellow); }
-.ct-attack { background: linear-gradient(145deg,#3d1a00,#1a0d00); border-color: var(--orange); }
-.ct-nope { background: linear-gradient(145deg,#1a003d,#0d001a); border-color: var(--purple); }
-.ct-shuffle { background: linear-gradient(145deg,#001a3d,#000d1a); border-color: var(--blue); }
-.ct-future { background: linear-gradient(145deg,#003d3d,#001a1a); border-color: var(--teal); }
-.ct-cat { background: linear-gradient(145deg,#1a0a30,#0d0518); border-color: var(--pink); }
+/* ── Turn banner ── */
+.tbanner{
+  display:flex;justify-content:space-between;align-items:center;
+  background:linear-gradient(135deg,rgba(200,150,26,.1),transparent);
+  border:1px solid rgba(200,150,26,.25);border-radius:4px;
+  padding:12px 18px;margin-bottom:12px;
+}
+.tname-big{font-family:'Bebas Neue',cursive;font-size:1.3rem;letter-spacing:2px;}
+.phase-badge{
+  display:inline-block;padding:4px 12px;border-radius:2px;
+  font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+}
+.ph-move{background:rgba(76,219,124,.12);color:#4cdb7c;border:1px solid rgba(76,219,124,.3);}
+.ph-act{background:rgba(240,184,48,.12);color:var(--gold2);border:1px solid rgba(240,184,48,.3);}
+.ph-nego{background:rgba(255,112,96,.12);color:#ff7060;border:1px solid rgba(255,112,96,.3);animation:pulse .8s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.ph-done{background:rgba(130,130,130,.12);color:var(--aged);border:1px solid rgba(130,130,130,.2);}
 
-/* Player info sidebar */
-.player-info { background: rgba(30,10,50,.7); border: 1px solid var(--border); border-radius: 11px;
-  padding: 10px 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 9px; font-size: .84rem; }
-.player-info.current-turn { border-color: var(--yellow); background: rgba(255,217,61,.06); }
-.player-info.dead { opacity: .4; }
-.pi-icon { font-size: 1.4rem; }
-.pi-name { flex: 1; font-weight: 700; }
-.pi-cards { font-size: .7rem; color: var(--muted); }
-.pi-badge { font-size: .6rem; padding: 2px 7px; border-radius: 20px; white-space: nowrap; }
+/* ── Dice ── */
+.darea{display:flex;align-items:center;gap:14px;padding:6px 0;}
+.dice-face{
+  width:54px;height:54px;background:var(--paper);color:var(--dark);
+  border-radius:10px;font-size:1.9rem;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 12px rgba(0,0,0,.5),inset 0 -3px 0 rgba(0,0,0,.2);
+}
+.dice-face.rolling{animation:droll .4s ease;}
+@keyframes droll{0%,100%{transform:rotate(0)scale(1)}40%{transform:rotate(16deg)scale(1.12)}70%{transform:rotate(-10deg)scale(.9)}}
 
-/* Turn banner */
-.turn-banner { display: flex; justify-content: space-between; align-items: center;
-  background: rgba(46,19,80,.6); border: 1px solid var(--border); border-radius: 13px;
-  padding: 12px 16px; margin-bottom: 12px; }
+/* ── Influence cards in hand ── */
+.hand-area{display:flex;flex-wrap:wrap;gap:7px;padding:4px 0;min-height:85px;}
+.icard{
+  width:64px;height:92px;border-radius:6px;border:1.5px solid;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .16s;font-size:.58rem;font-weight:700;
+  text-align:center;padding:4px;gap:3px;position:relative;
+  background:linear-gradient(145deg,rgba(255,255,255,.05),transparent);
+}
+.icard:hover{transform:translateY(-9px);z-index:10;}
+.icard.sel{transform:translateY(-14px);z-index:20;box-shadow:0 10px 24px rgba(240,184,48,.5);}
+.icard.dis{opacity:.25;cursor:not-allowed;transform:none!important;}
+.ic-travel{border-color:var(--red)!important;background:rgba(192,57,43,.1)!important;}
+.ic-boss{border-color:var(--gold2)!important;background:rgba(200,150,26,.1)!important;}
+.ic-recruit{border-color:var(--purple)!important;background:rgba(90,26,140,.1)!important;}
+.ic-stop{border-color:var(--blue)!important;background:rgba(26,74,140,.1)!important;}
+.card-ico{font-size:1.5rem;}
+.card-lbl{font-size:.58rem;font-weight:700;line-height:1.1;}
+.card-sub{font-size:.5rem;color:var(--aged);line-height:1.1;}
 
-/* Phase badge */
-.pbadge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: .65rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-.pb-draw { background: rgba(77,159,255,.15); color: var(--blue); border: 1px solid var(--blue); }
-.pb-play { background: rgba(107,203,119,.15); color: var(--green); border: 1px solid var(--green); }
-.pb-explode { background: rgba(255,68,68,.2); color: var(--red); border: 1px solid var(--red); animation: blink .5s infinite; }
-@keyframes blink { 0%,100% { opacity:1 } 50% { opacity:.4 } }
-.pb-wait { background: rgba(128,96,160,.15); color: var(--muted); border: 1px solid var(--border); }
+/* ── Project card ── */
+.proj-card{
+  background:linear-gradient(145deg,rgba(200,150,26,.1),rgba(192,57,43,.04));
+  border:1.5px solid rgba(200,150,26,.35);border-radius:5px;padding:16px;
+}
+.proj-num{font-family:'Bebas Neue',cursive;color:var(--aged);font-size:1rem;letter-spacing:2px;}
+.proj-val{font-family:'Bebas Neue',cursive;font-size:2.6rem;color:var(--gold2);letter-spacing:2px;line-height:1;}
+.proj-investors{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;align-items:center;}
+.inv-slot{
+  width:30px;height:30px;border-radius:50%;border:2px solid;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.72rem;font-weight:800;position:relative;cursor:default;
+  transition:all .18s;
+}
+.inv-slot.choice{border-style:dashed!important;opacity:.7;}
+.inv-slot.present{box-shadow:0 0 0 3px rgba(76,219,124,.4);}
+.inv-slot.absent{opacity:.25;}
+.inv-slot.traveling::after{content:'✈️';position:absolute;top:-6px;right:-6px;font-size:.65rem;}
+.inv-slot.stolen::after{content:'🤝';position:absolute;top:-6px;right:-6px;font-size:.65rem;}
 
-/* Explosion animation */
-.explosion-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.85); z-index: 9000;
-  display: none; align-items: center; justify-content: center; flex-direction: column; }
-.explosion-overlay.show { display: flex; }
-.explosion-anim { font-size: 8rem; animation: explode .8s ease-in; }
-@keyframes explode { 0% { transform:scale(.3);opacity:.3; } 60% { transform:scale(1.3);opacity:1; } 100% { transform:scale(1);opacity:1; } }
-.explosion-text { font-family: 'Fredoka One', cursive; font-size: 2.5rem; color: var(--red); margin-top: 10px; }
+/* ── Negotiation ── */
+.nego-wrap{background:rgba(0,0,0,.3);border:1px solid rgba(200,150,26,.2);border-radius:4px;overflow:hidden;}
+.nego-header{
+  background:linear-gradient(135deg,rgba(200,150,26,.12),transparent);
+  border-bottom:1px solid rgba(200,150,26,.15);
+  padding:9px 14px;font-size:.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold2);
+}
+.nego-row{
+  display:flex;align-items:center;gap:10px;padding:10px 14px;
+  border-bottom:1px solid rgba(255,255,255,.05);font-size:.86rem;
+}
+.nego-row:last-child{border-bottom:none;}
+.nego-pname{flex:1;display:flex;align-items:center;gap:7px;font-weight:600;}
+.nego-amount{
+  font-family:'Bebas Neue',cursive;font-size:1.2rem;color:var(--gold2);
+  min-width:110px;text-align:right;
+}
+.ns{font-size:.62rem;padding:3px 8px;border-radius:2px;white-space:nowrap;}
+.ns-pending{background:rgba(90,90,90,.2);color:var(--aged);border:1px solid rgba(90,90,90,.3);}
+.ns-accept{background:rgba(76,219,124,.12);color:#4cdb7c;border:1px solid rgba(76,219,124,.3);}
+.ns-reject{background:rgba(255,112,96,.12);color:#ff7060;border:1px solid rgba(255,112,96,.3);}
+.ns-counter{background:rgba(96,160,255,.12);color:#60a0ff;border:1px solid rgba(96,160,255,.3);}
+.ns-boss{background:rgba(200,150,26,.12);color:var(--gold2);border:1px solid rgba(200,150,26,.3);}
 
-/* Notification */
-.notif { position: fixed; top: 16px; right: 16px; background: var(--card); border: 1.5px solid var(--pink);
-  border-radius: 13px; padding: 13px 18px; font-size: .86rem; z-index: 9999;
-  transform: translateX(130%); transition: transform .28s; max-width: 280px;
-  box-shadow: 0 6px 28px rgba(0,0,0,.5); }
-.notif.show { transform: translateX(0); }
+/* My deal response box */
+.my-deal-box{
+  background:linear-gradient(145deg,rgba(200,150,26,.07),rgba(192,57,43,.03));
+  border:1.5px solid rgba(200,150,26,.3);border-radius:4px;padding:14px;margin-top:10px;
+}
+.my-offer-big{
+  font-family:'Bebas Neue',cursive;font-size:2.4rem;color:var(--gold2);
+  text-align:center;margin:8px 0;letter-spacing:2px;
+}
+.boss-offer-input{
+  font-family:'Bebas Neue',cursive!important;font-size:1.2rem!important;
+  text-align:center!important;color:var(--gold2)!important;letter-spacing:1px!important;
+}
 
-/* Modal */
-.mover { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: none; align-items: center; justify-content: center; z-index: 8000; padding: 14px; }
-.mover.open { display: flex; }
-.mbox { background: var(--card); border: 1.5px solid var(--border); border-radius: 18px; padding: 24px; max-width: 420px; width: 100%;
-  animation: mIn .22s ease; box-shadow: 0 20px 60px rgba(0,0,0,.6); }
-@keyframes mIn { from { transform:scale(.88);opacity:0 } to { transform:scale(1);opacity:1 } }
-.mtitle { font-family: 'Fredoka One', cursive; font-size: 1.3rem; color: var(--yellow); margin-bottom: 12px; }
-.msub { font-size: .82rem; color: var(--muted); margin-bottom: 14px; }
+/* ── Scoreboard ── */
+.score-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 12px;border-radius:3px;background:rgba(255,255,255,.03);
+  margin-bottom:5px;font-size:.85rem;border:1px solid rgba(255,255,255,.05);
+}
+.score-row.lead{background:rgba(200,150,26,.07);border-color:rgba(200,150,26,.2);}
+.score-money{font-family:'Bebas Neue',cursive;font-size:1.2rem;color:var(--gold2);}
 
-/* Log */
-.logbox { height: 110px; overflow-y: auto; background: rgba(10,4,22,.6); border-radius: 9px;
-  padding: 8px 12px; font-size: .76rem; color: var(--muted); line-height: 2; }
-.lg-ex { color: var(--red) !important; font-weight: 700; }
-.lg-df { color: var(--green) !important; }
-.lg-act { color: var(--yellow) !important; }
-.lg-info { color: var(--blue) !important; }
+/* ── Log ── */
+.logbox{
+  height:120px;overflow-y:auto;
+  background:rgba(0,0,0,.4);border-radius:3px;padding:9px 12px;
+  font-size:.74rem;color:var(--aged);line-height:2;
+}
+.lg{color:var(--gold2)!important;} .lr{color:#ff7060!important;}
+.lgg{color:#4cdb7c!important;} .lb{color:#60a0ff!important;}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 
-/* Chat */
-.chatbox { height: 80px; overflow-y: auto; background: rgba(10,4,22,.6); border-radius: 9px; padding: 7px 12px; font-size: .76rem; line-height: 1.9; margin-bottom: 7px; }
-.chat-row { display: flex; gap: 7px; }
-.chat-row input { flex: 1; }
+/* ── Chat ── */
+.chatbox{height:85px;overflow-y:auto;background:rgba(0,0,0,.4);border-radius:3px;padding:8px 12px;font-size:.75rem;line-height:1.85;margin-bottom:7px;}
+.chatrow{display:flex;gap:7px;}
 
-/* 2col lobby */
-.l2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-@media(max-width:540px) { .l2 { grid-template-columns: 1fr; } }
+/* ── Notif ── */
+.notif{
+  position:fixed;top:16px;right:16px;
+  background:linear-gradient(135deg,#1a1208,#0f0a04);
+  border:1px solid var(--gold);border-radius:4px;
+  padding:12px 18px;font-size:.85rem;z-index:9999;
+  transform:translateX(130%);transition:transform .28s;max-width:280px;
+  box-shadow:0 8px 28px rgba(0,0,0,.6);
+}
+.notif.show{transform:translateX(0);}
 
-/* Deck position selector */
-.pos-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 7px; margin: 12px 0; }
-.pos-btn { background: rgba(46,19,80,.7); border: 1.5px solid var(--border); border-radius: 8px;
-  padding: 8px 4px; text-align: center; cursor: pointer; font-size: .75rem; transition: all .18s; }
-.pos-btn:hover { border-color: var(--pink); background: rgba(255,77,166,.1); color: var(--pink); }
+/* ── Modal ── */
+.mover{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:8000;padding:14px;}
+.mover.open{display:flex;}
+.mbox{
+  background:linear-gradient(145deg,#1e1608,#140e05);
+  border:1px solid var(--border);border-radius:5px;
+  padding:22px;max-width:460px;width:100%;
+  animation:mIn .22s ease;box-shadow:0 20px 60px rgba(0,0,0,.7);
+}
+@keyframes mIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.mtitle{font-family:'Bebas Neue',cursive;font-size:1.4rem;letter-spacing:2px;color:var(--gold2);margin-bottom:10px;}
 
-/* Cat combo indicator */
-.combo-bar { background: rgba(255,77,166,.08); border: 1px solid rgba(255,77,166,.2); border-radius: 9px;
-  padding: 8px 12px; font-size: .78rem; margin-top: 8px; display: none; }
-.combo-bar.show { display: block; }
+/* ── Investor tag ── */
+.inv-tag{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 9px;border-radius:2px;font-size:.76rem;font-weight:700;
+  border:1px solid;margin:2px;
+}
 
-/* Result */
-.rank-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 14px;
-  border-radius: 11px; background: rgba(46,19,80,.5); margin-bottom: 7px; font-size: .88rem; }
-.rank-row.winner { background: rgba(255,217,61,.08); border: 1.5px solid rgba(255,217,61,.25); }
+/* ── 2col lobby ── */
+.l2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:540px){.l2{grid-template-columns:1fr;}}
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+/* ── Mobile ── */
+@media(max-width:600px){.board-grid{gap:1px;}.bcell{font-size:.4rem;}.pawn{width:5px;height:5px;}}
 
-/* Future card viewer */
-.future-cards { display: flex; gap: 8px; justify-content: center; margin: 12px 0; }
-.future-card { width: 68px; height: 100px; border-radius: 11px; border: 2.5px solid; display: flex;
-  flex-direction: column; align-items: center; justify-content: center; font-size: 1.4rem; padding: 5px; }
+/* ── Investor card display ── */
+.my-investors{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.inv-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 11px;border-radius:3px;border:1.5px solid;
+  font-size:.8rem;font-weight:700;
+}
+
+/* ── Result ── */
+.rank-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 15px;border-radius:3px;background:rgba(255,255,255,.03);
+  margin-bottom:7px;border:1px solid rgba(255,255,255,.06);
+}
+.rank-row.winner{background:rgba(200,150,26,.08);border-color:rgba(200,150,26,.25);}
 </style>
 </head>
 <body>
 <div id="app">
-  <div class="game-title">
-    <h1>🐱💣 แมวระเบิด</h1>
-    <p>Exploding Kittens · Online Multiplayer · 2–5 Players</p>
+  <div class="hdr">
+    <h1>I'M THE BOSS</h1>
+    <div class="hdr-sub">อย่าซ่ากับบอส · Online Board Game · 3–6 Players</div>
+    <div class="hdr-line"></div>
   </div>
 
-  <!-- ═══ MENU ═══ -->
+  <!-- ══════ MENU ══════ -->
   <div id="screen-menu" class="screen active">
     <div class="l2">
       <div class="panel">
-        <div class="panel-title">สร้างห้องใหม่</div>
-        <div class="field"><label>ชื่อของคุณ</label><input type="text" id="hname" placeholder="ใส่ชื่อ..." maxlength="14"></div>
-        <button class="btn btn-pink" style="width:100%" onclick="createRoom()">🐱 สร้างห้อง</button>
+        <div class="ptitle">สร้างห้องใหม่</div>
+        <div class="field"><label>ชื่อของคุณ</label><input type="text" id="hname" placeholder="ชื่อ..." maxlength="14"></div>
+        <button class="btn btn-gold" style="width:100%" onclick="createRoom()">👑 สร้างห้อง</button>
       </div>
       <div class="panel">
-        <div class="panel-title">เข้าร่วมห้อง</div>
-        <div class="field"><label>ชื่อของคุณ</label><input type="text" id="jname" placeholder="ใส่ชื่อ..." maxlength="14"></div>
+        <div class="ptitle">เข้าร่วมห้อง</div>
+        <div class="field"><label>ชื่อของคุณ</label><input type="text" id="jname" placeholder="ชื่อ..." maxlength="14"></div>
         <div class="field"><label>Room Code</label>
-          <input type="text" id="jcode" placeholder="XXXXXX" maxlength="6" style="text-transform:uppercase;text-align:center;font-family:'Fredoka One',cursive;font-size:1.6rem;letter-spacing:6px">
+          <input type="text" id="jcode" placeholder="XXXXXX" maxlength="6"
+            style="text-transform:uppercase;text-align:center;font-family:'Bebas Neue',cursive;font-size:1.6rem;letter-spacing:6px">
         </div>
         <button class="btn btn-out" style="width:100%" onclick="joinRoom()">🚪 เข้าร่วม</button>
       </div>
     </div>
+
     <!-- Card guide -->
     <div class="panel">
-      <div class="panel-title">การ์ดในเกม</div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:.76rem;text-align:center">
-        <div style="padding:9px;background:rgba(255,34,68,.08);border:1px solid rgba(255,34,68,.3);border-radius:9px"><div style="font-size:1.6rem">💣</div><div style="color:#ff4444;font-weight:700">แมวระเบิด</div><div style="color:var(--muted);font-size:.66rem">จั่วแล้วตาย!</div></div>
-        <div style="padding:9px;background:rgba(107,203,119,.08);border:1px solid rgba(107,203,119,.3);border-radius:9px"><div style="font-size:1.6rem">🧨</div><div style="color:var(--green);font-weight:700">Defuse</div><div style="color:var(--muted);font-size:.66rem">กู้ระเบิด รอด!</div></div>
-        <div style="padding:9px;background:rgba(180,79,255,.08);border:1px solid rgba(180,79,255,.3);border-radius:9px"><div style="font-size:1.6rem">🚫</div><div style="color:var(--purple);font-weight:700">Nope</div><div style="color:var(--muted);font-size:.66rem">ยกเลิกการ์ด</div></div>
-        <div style="padding:9px;background:rgba(255,140,66,.08);border:1px solid rgba(255,140,66,.3);border-radius:9px"><div style="font-size:1.6rem">⚔️</div><div style="color:var(--orange);font-weight:700">Attack</div><div style="color:var(--muted);font-size:.66rem">ข้ามตา+บังคับ×2</div></div>
-        <div style="padding:9px;background:rgba(255,217,61,.08);border:1px solid rgba(255,217,61,.3);border-radius:9px"><div style="font-size:1.6rem">⏭️</div><div style="color:var(--yellow);font-weight:700">Skip</div><div style="color:var(--muted);font-size:.66rem">ข้ามตาโดยไม่จั่ว</div></div>
-        <div style="padding:9px;background:rgba(77,159,255,.08);border:1px solid rgba(77,159,255,.3);border-radius:9px"><div style="font-size:1.6rem">🔀</div><div style="color:var(--blue);font-weight:700">Shuffle</div><div style="color:var(--muted);font-size:.66rem">สับไพ่ใหม่</div></div>
-        <div style="padding:9px;background:rgba(77,255,214,.08);border:1px solid rgba(77,255,214,.3);border-radius:9px"><div style="font-size:1.6rem">🔮</div><div style="color:var(--teal);font-weight:700">See Future</div><div style="color:var(--muted);font-size:.66rem">ดู 3 ใบบนสุด</div></div>
-        <div style="padding:9px;background:rgba(255,77,166,.08);border:1px solid rgba(255,77,166,.3);border-radius:9px"><div style="font-size:1.6rem">🐱</div><div style="color:var(--pink);font-weight:700">Cat Cards</div><div style="color:var(--muted);font-size:.66rem">คู่→ขโมยการ์ด</div></div>
+      <div class="ptitle">การ์ดอิทธิพล</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px;font-size:.78rem;">
+        <div class="icard ic-travel" style="width:auto;height:auto;padding:11px 8px;flex-direction:row;justify-content:flex-start;gap:9px">
+          <div><div class="card-ico">✈️</div></div>
+          <div><div style="color:#ff7060;font-weight:700;margin-bottom:2px">Travel</div><div style="color:var(--aged);font-size:.7rem">ส่งนักลงทุนออก<br>ต้องเป็นสีเดียวกัน<br>(เทาใช้ได้ทุกสี)</div></div>
+        </div>
+        <div class="icard ic-boss" style="width:auto;height:auto;padding:11px 8px;flex-direction:row;justify-content:flex-start;gap:9px">
+          <div><div class="card-ico">👑</div></div>
+          <div><div style="color:var(--gold2);font-weight:700;margin-bottom:2px">Boss</div><div style="color:var(--aged);font-size:.7rem">แย่งเป็น Boss<br>ลงทับได้เรื่อยๆ<br>ใบสุดท้ายชนะ</div></div>
+        </div>
+        <div class="icard ic-recruit" style="width:auto;height:auto;padding:11px 8px;flex-direction:row;justify-content:flex-start;gap:9px">
+          <div><div class="card-ico">🤝</div></div>
+          <div><div style="color:#c080ff;font-weight:700;margin-bottom:2px">Recruit ×3</div><div style="color:var(--aged);font-size:.7rem">ใช้ 3 ใบพร้อมกัน<br>ขโมยนักลงทุน<br>1 ตา</div></div>
+        </div>
+        <div class="icard ic-stop" style="width:auto;height:auto;padding:11px 8px;flex-direction:row;justify-content:flex-start;gap:9px">
+          <div><div class="card-ico">🛑</div></div>
+          <div><div style="color:#60a0ff;font-weight:700;margin-bottom:2px">Stop</div><div style="color:var(--aged);font-size:.7rem">ยกเลิกการ์ด<br>Travel/Boss/Recruit<br>(ห้ามหยุด Stop)</div></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ LOBBY ═══ -->
+  <!-- ══════ LOBBY ══════ -->
   <div id="screen-lobby" class="screen">
     <div class="panel">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-        <div class="panel-title" style="margin-bottom:0">🐾 ห้องรอ</div>
-        <span class="pbadge pb-play">รอผู้เล่น</span>
+        <div class="ptitle" style="margin-bottom:0">ห้องรอ</div>
+        <span class="phase-badge ph-move">รอผู้เล่น</span>
       </div>
-      <div style="font-size:.68rem;color:var(--muted);text-align:center;margin-bottom:5px;letter-spacing:2px">ROOM CODE — คลิกเพื่อคัดลอก</div>
-      <div class="room-code" id="rc" onclick="copyCode()">------</div>
-      <div style="text-align:center;font-size:.72rem;color:var(--muted);margin-bottom:14px">แชร์โค้ดให้เพื่อนแล้วเริ่มเกมได้เลย!</div>
-      <div class="player-grid" id="lpgrid"></div>
+      <div style="font-size:.65rem;color:var(--aged);text-align:center;margin-bottom:5px;letter-spacing:2px">ROOM CODE · คลิกเพื่อคัดลอก</div>
+      <div class="rcode" id="rc" onclick="copyCode()">------</div>
+      <div style="text-align:center;font-size:.72rem;color:var(--aged);margin-bottom:14px">แชร์โค้ดนี้ให้เพื่อน</div>
+      <div class="pgrid" id="lpgrid"></div>
     </div>
     <div class="brow" style="justify-content:space-between">
       <button class="btn btn-out btn-sm" onclick="leaveRoom()">← ออก</button>
       <div class="brow">
-        <span id="rstatus" style="font-size:.75rem;color:var(--muted)"></span>
+        <span id="rstatus" style="font-size:.75rem;color:var(--aged)"></span>
         <button id="btnrdy" class="btn btn-out btn-sm" onclick="toggleReady()">✓ พร้อม</button>
-        <button id="btnstart" class="btn btn-yellow btn-sm" onclick="startGame()" style="display:none">🎮 เริ่มเกม!</button>
+        <button id="btnstart" class="btn btn-gold btn-sm" onclick="startGame()" style="display:none">▶ เริ่มเกม</button>
       </div>
     </div>
   </div>
 
-  <!-- ═══ GAME ═══ -->
+  <!-- ══════ GAME ══════ -->
   <div id="screen-game" class="screen">
-    <!-- Turn banner -->
-    <div class="turn-banner">
+    <div class="tbanner">
       <div>
-        <div style="font-size:.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase">เทิร์นของ</div>
-        <div id="tname" style="font-size:1.05rem;font-weight:800;color:var(--yellow)">-</div>
+        <div style="font-size:.58rem;color:var(--aged);letter-spacing:2px;text-transform:uppercase">เทิร์นของ</div>
+        <div class="tname-big" id="tname" style="color:var(--gold2)">–</div>
       </div>
       <div style="text-align:center">
-        <div style="font-size:.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase">เหลือ</div>
-        <div id="deck-count-disp" style="font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--pink)">0 ใบ</div>
+        <div style="font-size:.58rem;color:var(--aged);letter-spacing:2px;text-transform:uppercase">โครงการสำเร็จ</div>
+        <div style="font-family:'Bebas Neue',cursive;font-size:1.5rem"><span id="pdone">0</span><span style="color:var(--aged)">/15</span></div>
       </div>
-      <div id="phase-badge" class="pbadge pb-play">เล่น/จั่ว</div>
+      <span class="phase-badge ph-move" id="pbadge">เดิน</span>
     </div>
 
-    <div class="game-layout">
-      <!-- Main area -->
+    <div class="glayout">
+      <!-- LEFT -->
       <div>
-        <!-- Deck area -->
-        <div class="panel">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-            <div class="panel-title" style="margin-bottom:0">กองไพ่</div>
-            <div id="extra-turns-badge" style="display:none;font-size:.75rem;color:var(--orange);font-weight:700;background:rgba(255,140,66,.12);padding:3px 10px;border-radius:20px;border:1px solid var(--orange)">⚔️ ต้องเล่น <span id="extra-turns-n">0</span> รอบ</div>
-          </div>
-          <div class="deck-area">
-            <div>
-              <div class="deck-pile deck-back" id="draw-pile-btn" onclick="drawCard()">
-                <div style="font-size:2rem">🂠</div>
-                <div style="font-size:.7rem;color:var(--muted);margin-top:3px">จั่ว</div>
-                <div class="deck-count" id="deck-num">0</div>
-              </div>
-              <div style="text-align:center;font-size:.66rem;color:var(--muted);margin-top:5px">กองจั่ว</div>
-            </div>
-            <div style="font-size:2rem;color:var(--border)">↔</div>
-            <div>
-              <div class="deck-pile discard-pile" id="discard-top-disp">
-                <div style="font-size:1.8rem" id="discard-icon">—</div>
-                <div style="font-size:.65rem;color:var(--muted);margin-top:3px" id="discard-name">ว่าง</div>
-              </div>
-              <div style="text-align:center;font-size:.66rem;color:var(--muted);margin-top:5px">กองทิ้ง</div>
-            </div>
-          </div>
-          <div id="nope-timer" style="display:none;text-align:center;padding:7px;background:rgba(180,79,255,.1);border:1px solid var(--purple);border-radius:9px;font-size:.8rem;color:var(--purple)"></div>
+        <!-- Board -->
+        <div class="board-wrap"><div class="board-grid" id="bgrid"></div></div>
+
+        <!-- Actions -->
+        <div id="aarea"></div>
+
+        <!-- Project panel -->
+        <div class="panel" id="ppanel" style="display:none">
+          <div class="ptitle">โครงการปัจจุบัน</div>
+          <div id="pcontent"></div>
         </div>
 
-        <!-- My hand -->
+        <!-- Negotiation panel -->
+        <div class="panel" id="nego-panel" style="display:none">
+          <div class="ptitle">โต๊ะเจรจา</div>
+          <div id="nego-content"></div>
+          <div id="my-response" style="margin-top:10px;display:none"></div>
+          <div id="boss-controls" style="margin-top:10px;display:none"></div>
+        </div>
+
+        <!-- Hand -->
         <div class="panel">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-            <div class="panel-title" style="margin-bottom:0">มือของคุณ (<span id="hand-count">0</span> ใบ)</div>
-            <button id="play-sel-btn" class="btn btn-pink btn-sm" onclick="playSelected()" style="display:none">🃏 ใช้การ์ด</button>
+            <div class="ptitle" style="margin-bottom:0">การ์ดในมือ (<span id="hcount">0</span>/12)</div>
+            <div id="cardact" style="display:none">
+              <div class="brow">
+                <button class="btn btn-gold btn-sm" onclick="playCard()">🃏 ใช้การ์ด</button>
+                <button class="btn btn-out btn-xs" onclick="clearSel()">✕</button>
+              </div>
+            </div>
           </div>
-          <div class="hand-area" id="hand-area"></div>
-          <div class="combo-bar" id="combo-bar">
-            🐱 เลือก <span id="combo-count">0</span>/2 การ์ดแมวที่เหมือนกัน เพื่อขโมยการ์ดจากผู้เล่นอื่น
-          </div>
+          <div class="hand-area" id="harea"></div>
         </div>
 
         <!-- Log -->
         <div class="panel">
-          <div class="panel-title">📜 เหตุการณ์</div>
+          <div class="ptitle">บันทึกเหตุการณ์</div>
           <div class="logbox" id="glog"></div>
         </div>
 
         <!-- Chat -->
         <div class="panel">
-          <div class="panel-title">💬 แชท</div>
+          <div class="ptitle">💬 แชท / เจรจา</div>
           <div class="chatbox" id="chatbox"></div>
-          <div class="chat-row">
-            <input type="text" id="chatinput" placeholder="พิมพ์ข้อความ..." maxlength="100" onkeydown="if(event.key==='Enter')sendChat()">
+          <div class="chatrow">
+            <input type="text" id="chatinput" placeholder="พิมพ์ข้อความเจรจา..." maxlength="120" onkeydown="if(event.key==='Enter')sendChat()">
             <button class="btn btn-out btn-sm" onclick="sendChat()">ส่ง</button>
           </div>
         </div>
       </div>
 
-      <!-- Sidebar -->
+      <!-- RIGHT SIDEBAR -->
       <div>
+        <!-- My investors -->
         <div class="panel">
-          <div class="panel-title">ผู้เล่น</div>
-          <div id="players-sidebar"></div>
+          <div class="ptitle">นักลงทุนของคุณ</div>
+          <div id="my-investors"></div>
         </div>
-        <button class="btn btn-red btn-sm" style="width:100%" onclick="leaveRoom()">🚪 ออก</button>
+
+        <!-- Scoreboard -->
+        <div class="panel">
+          <div class="ptitle">คะแนน</div>
+          <div id="scoreboard"></div>
+        </div>
+
+        <!-- Players -->
+        <div class="panel">
+          <div class="ptitle">ผู้เล่น</div>
+          <div id="gplayers"></div>
+        </div>
+
+        <button class="btn btn-red btn-sm" style="width:100%;margin-top:4px" onclick="leaveRoom()">🚪 ออก</button>
       </div>
     </div>
   </div>
 
-  <!-- ═══ RESULT ═══ -->
+  <!-- ══════ RESULT ══════ -->
   <div id="screen-result" class="screen">
     <div class="panel" style="text-align:center;padding:36px 20px">
       <div style="font-size:4rem;margin-bottom:8px">🏆</div>
-      <div style="font-family:'Fredoka One',cursive;font-size:2.8rem;color:var(--yellow)" id="rtitle">จบเกม!</div>
-      <div style="color:var(--muted);margin:6px 0 22px;font-size:.82rem" id="rsub"></div>
-      <div style="max-width:380px;margin:0 auto 22px" id="rranks"></div>
-      <button class="btn btn-pink" onclick="leaveRoom()">🏠 กลับหน้าหลัก</button>
+      <div style="font-family:'Bebas Neue',cursive;font-size:3rem;color:var(--gold2);letter-spacing:3px" id="rtitle">ผลการแข่งขัน</div>
+      <div style="color:var(--aged);font-size:.78rem;margin-bottom:20px" id="rsub"></div>
+      <div style="max-width:420px;margin:0 auto 22px" id="rscores"></div>
+      <button class="btn btn-gold" onclick="leaveRoom()">🏠 กลับหน้าหลัก</button>
     </div>
   </div>
 </div>
 
-<!-- Explosion overlay -->
-<div class="explosion-overlay" id="exp-overlay">
-  <div class="explosion-anim">💥🐱💥</div>
-  <div class="explosion-text" id="exp-text">คุณระเบิด!</div>
-  <div style="color:var(--muted);font-size:.85rem;margin-top:8px">คุณออกจากเกมแล้ว</div>
-  <button class="btn btn-out btn-sm" style="margin-top:18px" onclick="document.getElementById('exp-overlay').classList.remove('show')">ดูเกมต่อ</button>
-</div>
-
-<!-- Modal: place kitten -->
-<div class="mover" id="m-place">
+<!-- Modal: Travel target -->
+<div class="mover" id="m-travel">
   <div class="mbox">
-    <div class="mtitle">🧨 วางแมวระเบิดกลับไปที่ไหน?</div>
-    <div class="msub">เลือกตำแหน่งใน Draw Pile (แบ่งเป็น 5 ช่วง)</div>
-    <div id="place-opts"></div>
-    <div style="font-size:.72rem;color:var(--muted);text-align:center">รู้ตำแหน่งแต่คนอื่นไม่รู้ 😏</div>
+    <div class="mtitle">✈️ ส่งใครไปท่องเที่ยว?</div>
+    <div style="font-size:.8rem;color:var(--aged);margin-bottom:12px">เลือกนักลงทุนที่จะส่งออกจากโครงการนี้</div>
+    <div id="travel-opts"></div>
+    <button class="btn btn-out btn-sm" style="margin-top:10px" onclick="cm('m-travel')">ยกเลิก</button>
   </div>
 </div>
 
-<!-- Modal: steal target -->
-<div class="mover" id="m-steal">
+<!-- Modal: Recruit target -->
+<div class="mover" id="m-recruit">
   <div class="mbox">
-    <div class="mtitle">😼 ขโมยจากใคร?</div>
-    <div class="msub">เล่น 2 การ์ดแมวคู่ → ขโมยการ์ดสุ่มจากผู้เล่นอื่น</div>
-    <div id="steal-opts"></div>
-    <div class="brow" style="margin-top:10px"><button class="btn btn-out btn-sm" onclick="cm('m-steal')">ยกเลิก</button></div>
+    <div class="mtitle">🤝 ขโมยนักลงทุนจากใคร?</div>
+    <div style="font-size:.8rem;color:var(--aged);margin-bottom:12px">ใช้ Recruit ×3 เพื่อขโมยนักลงทุน 1 ตา</div>
+    <div id="recruit-opts"></div>
+    <button class="btn btn-out btn-sm" style="margin-top:10px" onclick="cm('m-recruit')">ยกเลิก</button>
   </div>
 </div>
 
-<!-- Modal: see future -->
-<div class="mover" id="m-future">
-  <div class="mbox">
-    <div class="mtitle">🔮 3 ใบบนสุด (ลำดับ 1→3)</div>
-    <div class="msub">ใบที่ 1 คือการ์ดที่คุณจะจั่วถัดไป</div>
-    <div class="future-cards" id="future-cards"></div>
-    <button class="btn btn-pink btn-sm" style="width:100%;margin-top:12px" onclick="cm('m-future')">เข้าใจแล้ว!</button>
-  </div>
-</div>
-
-<!-- Modal: nope? -->
-<div class="mover" id="m-nope">
-  <div class="mbox" style="text-align:center">
-    <div style="font-size:3rem;margin-bottom:8px">🚫</div>
-    <div class="mtitle">มีคน Nope คุณ!</div>
-    <div class="msub" id="nope-msg">การกระทำของคุณถูกยกเลิก</div>
-    <button class="btn btn-out btn-sm" style="margin-top:10px" onclick="cm('m-nope')">โอเค</button>
-  </div>
-</div>
-
-<!-- Notification -->
 <div class="notif" id="notif"></div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase,ref,set,get,update,onValue,off,remove,push,serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import{getDatabase,ref,set,get,update,onValue,off,remove,push}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-const fb = initializeApp({
+const fbApp=initializeApp({
   apiKey:"AIzaSyBfZu1QiXTX3ayu88pja1ynbToPiIMm1j4",
   authDomain:"i-am-the-boss-online.firebaseapp.com",
   projectId:"i-am-the-boss-online",
@@ -443,629 +577,870 @@ const fb = initializeApp({
   appId:"1:920134505396:web:ed4aea66646ce087c498e1",
   databaseURL:"https://i-am-the-boss-online-default-rtdb.asia-southeast1.firebasedatabase.app"
 });
-const db = getDatabase(fb);
+const db=getDatabase(fbApp);
 
-// ══════════════════════════════════════════
-// CARD DEFINITIONS
-// ══════════════════════════════════════════
-const CARD_DEFS = {
-  exploding: { name:'💣 แมวระเบิด', icon:'💣', type:'exploding', color:'#ff2244' },
-  defuse:    { name:'🧨 Defuse', icon:'🧨', type:'defuse', color:'#6bcb77' },
-  nope:      { name:'🚫 Nope', icon:'🚫', type:'nope', color:'#b44fff' },
-  attack:    { name:'⚔️ Attack', icon:'⚔️', type:'attack', color:'#ff8c42' },
-  skip:      { name:'⏭️ Skip', icon:'⏭️', type:'skip', color:'#ffd93d' },
-  shuffle:   { name:'🔀 Shuffle', icon:'🔀', type:'shuffle', color:'#4d9fff' },
-  seefuture: { name:'🔮 See Future', icon:'🔮', type:'seefuture', color:'#4dffd6' },
-  cat1:      { name:'🐱 Tacocat', icon:'🌮🐱', type:'cat', catId:'cat1', color:'#ff4da6' },
-  cat2:      { name:'🐱 Cattermelon', icon:'🍉🐱', type:'cat', catId:'cat2', color:'#ff4da6' },
-  cat3:      { name:'🐱 Hairy Potato', icon:'🥔🐱', type:'cat', catId:'cat3', color:'#ff4da6' },
-  cat4:      { name:'🐱 Rainbow Ralphing', icon:'🌈🐱', type:'cat', catId:'cat4', color:'#ff4da6' },
-  cat5:      { name:'🐱 Beard Cat', icon:'🧔🐱', type:'cat', catId:'cat5', color:'#ff4da6' },
-};
-const PLAYER_EMOJI = ['😼','🦁','🐯','🦊','🐺'];
-const PLAYER_COLORS = ['#ff4da6','#ffd93d','#4d9fff','#6bcb77','#b44fff'];
+// ════════════════════════════════
+// CONSTANTS
+// ════════════════════════════════
+const COLORS=['red','blue','green','yellow','purple','orange'];
+const CNAME=['แดง','น้ำเงิน','เขียว','เหลือง','ม่วง','ส้ม'];
+const CEMOJI=['🔴','🔵','🟢','🟡','🟣','🟠'];
+const PEMOJI=['🤴','🦅','🐅','🦊','🐺','🦁'];
 
-function buildDeck(){
-  const d = [];
-  // Nope x4, Attack x4, Skip x4, Shuffle x4, SeeFuture x5
-  for(let i=0;i<4;i++) d.push({id:'nope'});
-  for(let i=0;i<4;i++) d.push({id:'attack'});
-  for(let i=0;i<4;i++) d.push({id:'skip'});
-  for(let i=0;i<4;i++) d.push({id:'shuffle'});
-  for(let i=0;i<5;i++) d.push({id:'seefuture'});
-  // Cat cards x4 each
-  ['cat1','cat2','cat3','cat4','cat5'].forEach(c=>{
-    for(let i=0;i<4;i++) d.push({id:c});
-  });
-  return shuffle(d);
+// Board path — 28 cells around the perimeter (10×8 grid)
+// Colors represent the investor cell on that space
+const BOARD_PATH=[
+  'red','blue','draw','green','yellow','purple','orange','red','blue','draw',
+  'wild','green','yellow','draw','purple','orange',
+  'red','blue','draw','green',
+  'yellow','purple','wild','orange',
+  'draw','red','blue','green'
+];
+
+// 15 Projects: id, value (baht), inv (required), ch (choice — pick one)
+const PROJECTS=[
+  {id:1,v:30000,inv:['red','blue'],ch:null},
+  {id:2,v:40000,inv:['green','yellow'],ch:null},
+  {id:3,v:50000,inv:['red','purple','orange'],ch:null},
+  {id:4,v:30000,inv:['blue','green'],ch:null},
+  {id:5,v:60000,inv:['yellow','purple'],ch:null},
+  {id:6,v:40000,inv:['orange','red'],ch:null},
+  {id:7,v:50000,inv:['blue','yellow','green'],ch:null},
+  {id:8,v:70000,inv:['red','purple'],ch:null},
+  {id:9,v:30000,inv:['green','orange'],ch:null},
+  {id:10,v:60000,inv:['blue','red'],ch:['yellow','purple']},
+  {id:11,v:50000,inv:['yellow','orange'],ch:null},
+  {id:12,v:80000,inv:['red','blue','green'],ch:null},
+  {id:13,v:40000,inv:['purple','orange'],ch:null},
+  {id:14,v:70000,inv:['green','yellow'],ch:['red','blue']},
+  {id:15,v:100000,inv:['red','blue','green','yellow'],ch:null},
+];
+
+// Influence deck — 98 cards
+function buildInfluenceDeck(){
+  const d=[];
+  // Travel: 2 per color (12) + 4 gray = 16
+  COLORS.forEach(c=>{d.push({t:'travel',c});d.push({t:'travel',c});});
+  for(let i=0;i<4;i++)d.push({t:'travel',c:'wild'});
+  // Boss: 8
+  for(let i=0;i<8;i++)d.push({t:'boss',c:'any'});
+  // Recruit: 12 (used in 3s)
+  for(let i=0;i<12;i++)d.push({t:'recruit',c:'any'});
+  // Stop: 8
+  for(let i=0;i<8;i++)d.push({t:'stop',c:'any'});
+  return sh(d);
 }
-function shuffle(a){ return a.sort(()=>Math.random()-.5); }
+function sh(a){return a.sort(()=>Math.random()-.5);}
 
-// ══════════════════════════════════════════
+// ════════════════════════════════
 // STATE
-// ══════════════════════════════════════════
-let myId = 'p_' + Math.random().toString(36).substr(2,8);
-let myName = '';
-let roomCode = '';
-let roomRef = null;
-let isHost = false;
-let gs = null;
-let selectedCards = []; // indices of selected cards in hand
-let pendingAction = null; // 'steal', 'place-kitten'
+// ════════════════════════════════
+let myId='p_'+Math.random().toString(36).substr(2,8);
+let myName='';
+let roomCode='';
+let roomRef=null;
+let isHost=false;
+let gs=null;
+let selIdx=null,selCard=null;
 
-// ══════════════════════════════════════════
+// ════════════════════════════════
 // UTILS
-// ══════════════════════════════════════════
-window.showNotif = (msg, type='info') => {
-  const el = document.getElementById('notif');
-  el.textContent = msg;
-  el.style.borderColor = type==='error' ? 'var(--red)' : type==='success' ? 'var(--green)' : 'var(--pink)';
+// ════════════════════════════════
+window.showNotif=(msg,type='info')=>{
+  const el=document.getElementById('notif');
+  el.textContent=msg;
+  el.style.borderColor=type==='error'?'var(--red)':type==='success'?'#4cdb7c':'var(--gold)';
   el.classList.add('show');
-  clearTimeout(el._t);
-  el._t = setTimeout(()=>el.classList.remove('show'), 3000);
+  clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),3200);
 };
-window.cm = id => document.getElementById(id).classList.remove('open');
-function om(id){ document.getElementById(id).classList.add('open'); }
-function ss(name){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-'+name).classList.add('active'); }
-function gc(id){ return document.getElementById(id); }
-function genCode(){ return Math.random().toString(36).toUpperCase().substr(2,6); }
-function addLog(msg, cls=''){
-  const b = gc('glog'); if(!b) return;
-  const d = document.createElement('div');
-  const t = new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
-  d.innerHTML = `<span style="color:var(--muted);font-size:.68rem">${t}·</span> <span class="${cls}">${msg}</span>`;
-  b.appendChild(d); b.scrollTop = b.scrollHeight;
-}
-window.copyCode = () => navigator.clipboard.writeText(roomCode).then(()=>showNotif('คัดลอกแล้ว! 📋','success'));
+window.cm=id=>document.getElementById(id).classList.remove('open');
+function om(id){document.getElementById(id).classList.add('open');}
+function ss(n){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+n).classList.add('active');}
+function gc(id){return document.getElementById(id);}
+function genCode(){return Math.random().toString(36).toUpperCase().substr(2,6);}
 
-// ══════════════════════════════════════════
-// ROOM MANAGEMENT
-// ══════════════════════════════════════════
-window.createRoom = async () => {
-  myName = gc('hname').value.trim();
-  if(!myName){ showNotif('ใส่ชื่อก่อนนะ!','error'); return; }
-  roomCode = genCode(); isHost = true;
-  roomRef = ref(db, 'rooms2/'+roomCode);
-  await set(roomRef, {
-    code: roomCode, host: myId, status: 'lobby', createdAt: Date.now(),
-    players: { [myId]: { id:myId, name:myName, ready:false, ci:0, isHost:true, alive:true } }
+function addLog(msg,cls=''){
+  const b=gc('glog');if(!b)return;
+  const d=document.createElement('div');
+  const t=new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
+  d.innerHTML=`<span style="color:var(--aged);font-size:.66rem">${t}·</span> <span class="${cls}">${msg}</span>`;
+  b.appendChild(d);b.scrollTop=b.scrollHeight;
+}
+window.copyCode=()=>navigator.clipboard.writeText(roomCode).then(()=>showNotif('คัดลอกแล้ว!','success'));
+
+function colorStyle(c){
+  const map={red:'var(--cr)',blue:'var(--cb)',green:'var(--cg)',yellow:'var(--cy)',purple:'var(--cp)',orange:'var(--co)'};
+  return map[c]||'var(--aged)';
+}
+
+// ════════════════════════════════
+// ROOM
+// ════════════════════════════════
+window.createRoom=async()=>{
+  myName=gc('hname').value.trim();
+  if(!myName){showNotif('ใส่ชื่อก่อน!','error');return;}
+  roomCode=genCode();isHost=true;
+  roomRef=ref(db,'boss3/'+roomCode);
+  await set(roomRef,{
+    code:roomCode,host:myId,status:'lobby',createdAt:Date.now(),
+    players:{[myId]:{id:myId,name:myName,ready:false,ci:0,isHost:true}}
   });
   subscribeRoom();
-  gc('rc').textContent = roomCode;
-  gc('btnstart').style.display = 'block';
+  gc('rc').textContent=roomCode;
+  gc('btnstart').style.display='block';
   ss('lobby');
-  showNotif('สร้างห้อง '+roomCode+' แล้ว! 🐱','success');
+  showNotif('สร้างห้อง '+roomCode,'success');
 };
 
-window.joinRoom = async () => {
-  myName = gc('jname').value.trim();
-  const code = gc('jcode').value.trim().toUpperCase();
-  if(!myName){ showNotif('ใส่ชื่อก่อน!','error'); return; }
-  if(code.length < 4){ showNotif('ใส่ Room Code!','error'); return; }
-  roomCode = code; roomRef = ref(db,'rooms2/'+roomCode);
-  const snap = await get(roomRef);
-  if(!snap.exists()){ showNotif('ไม่พบห้องนี้!','error'); return; }
-  const d = snap.val();
-  if(d.status !== 'lobby'){ showNotif('เกมเริ่มแล้ว!','error'); return; }
-  const pl = Object.keys(d.players||{}).length;
-  if(pl >= 5){ showNotif('ห้องเต็มแล้ว (5 คนสูงสุด)!','error'); return; }
-  isHost = false;
-  await update(ref(db,'rooms2/'+roomCode+'/players/'+myId), { id:myId, name:myName, ready:false, ci:pl, isHost:false, alive:true });
+window.joinRoom=async()=>{
+  myName=gc('jname').value.trim();
+  const code=gc('jcode').value.trim().toUpperCase();
+  if(!myName){showNotif('ใส่ชื่อก่อน!','error');return;}
+  if(code.length<4){showNotif('ใส่ Room Code!','error');return;}
+  roomCode=code;roomRef=ref(db,'boss3/'+roomCode);
+  const snap=await get(roomRef);
+  if(!snap.exists()){showNotif('ไม่พบห้องนี้!','error');return;}
+  const d=snap.val();
+  if(d.status!=='lobby'){showNotif('เกมเริ่มไปแล้ว!','error');return;}
+  const pl=Object.keys(d.players||{}).length;
+  if(pl>=6){showNotif('ห้องเต็มแล้ว!','error');return;}
+  isHost=false;
+  await update(ref(db,'boss3/'+roomCode+'/players/'+myId),{id:myId,name:myName,ready:false,ci:pl,isHost:false});
   subscribeRoom();
-  gc('rc').textContent = roomCode; ss('lobby');
-  showNotif('เข้าร่วมห้อง '+roomCode+' แล้ว! 😸','success');
+  gc('rc').textContent=roomCode;ss('lobby');
+  showNotif('เข้าร่วม '+roomCode,'success');
 };
 
-window.leaveRoom = async () => {
-  if(roomRef){ off(roomRef); await remove(ref(db,'rooms2/'+roomCode+'/players/'+myId)); }
-  roomRef=null; roomCode=''; gs=null; isHost=false; selectedCards=[]; ss('menu');
+window.leaveRoom=async()=>{
+  if(roomRef){off(roomRef);await remove(ref(db,'boss3/'+roomCode+'/players/'+myId));}
+  roomRef=null;roomCode='';gs=null;isHost=false;selIdx=null;selCard=null;ss('menu');
 };
 
-window.toggleReady = async () => {
-  const snap = await get(ref(db,'rooms2/'+roomCode+'/players/'+myId));
-  await update(ref(db,'rooms2/'+roomCode+'/players/'+myId), { ready: !snap.val().ready });
+window.toggleReady=async()=>{
+  const snap=await get(ref(db,'boss3/'+roomCode+'/players/'+myId));
+  await update(ref(db,'boss3/'+roomCode+'/players/'+myId),{ready:!snap.val().ready});
 };
 
 function subscribeRoom(){
-  if(roomRef) off(roomRef);
-  onValue(roomRef, snap => {
-    if(!snap.exists()){ ss('menu'); return; }
-    const prev = gs;
-    gs = snap.val();
-    if(gs.status === 'lobby') renderLobby(gs);
-    else if(gs.status === 'playing') renderGame(gs, prev);
-    else if(gs.status === 'ended') renderResult(gs);
+  if(roomRef)off(roomRef);
+  onValue(roomRef,snap=>{
+    if(!snap.exists()){ss('menu');return;}
+    gs=snap.val();
+    if(gs.status==='lobby')renderLobby(gs);
+    else if(gs.status==='playing')renderGame(gs);
+    else if(gs.status==='ended')renderResult(gs);
   });
 }
 
-// ══════════════════════════════════════════
+// ════════════════════════════════
 // LOBBY
-// ══════════════════════════════════════════
+// ════════════════════════════════
 function renderLobby(d){
-  const players = Object.values(d.players||{});
-  const grid = gc('lpgrid'); grid.innerHTML = '';
-  for(let i=0;i<5;i++){
-    const p = players[i];
-    const slot = document.createElement('div');
+  const players=Object.values(d.players||{});
+  const grid=gc('lpgrid');grid.innerHTML='';
+  for(let i=0;i<6;i++){
+    const p=players[i];
+    const slot=document.createElement('div');
     if(p){
-      slot.className = 'pslot ' + (p.ready||p.isHost ? 'rdy' : 'occ');
-      slot.innerHTML = `<div class="pslot-icon">${PLAYER_EMOJI[p.ci||0]}</div>
-        <div class="pslot-name">${p.name}${p.id===myId?' (คุณ)':''}</div>
-        <div class="pslot-sub">${p.isHost?'👑 Host':p.ready?'✅ พร้อม':'⏳ รอ...'}</div>`;
+      slot.className='pslot '+(p.ready||p.isHost?'rdy':'occ');
+      const cc=COLORS[p.ci||0];
+      slot.innerHTML=`<div class="pav bc-${cc} bg-${cc}">${PEMOJI[p.ci||0]}</div>
+        <div class="pname">${p.name}${p.id===myId?' (คุณ)':''}</div>
+        <div class="psub">${p.isHost?'👑 Host':p.ready?'✅ พร้อม':'⏳ รอ...'}</div>`;
     } else {
-      slot.className = 'pslot';
-      slot.innerHTML = `<div class="pslot-icon" style="color:var(--border)">➕</div><div class="pslot-name" style="color:var(--muted)">ว่าง</div><div class="pslot-sub">รอผู้เล่น</div>`;
+      slot.className='pslot';
+      slot.innerHTML=`<div style="font-size:1.8rem;margin-bottom:6px;color:var(--border)">+</div>
+        <div class="pname" style="color:var(--aged)">ว่าง</div><div class="psub">รอผู้เล่น</div>`;
     }
     grid.appendChild(slot);
   }
-  const rdy = players.filter(p=>p.ready||p.isHost).length;
-  gc('rstatus').textContent = `${rdy}/${players.length} พร้อม`;
+  const rdy=players.filter(p=>p.ready||p.isHost).length;
+  gc('rstatus').textContent=`${rdy}/${players.length} พร้อม`;
 }
 
-// ══════════════════════════════════════════
+// ════════════════════════════════
 // START GAME
-// ══════════════════════════════════════════
-window.startGame = async () => {
-  const snap = await get(roomRef);
-  const d = snap.val();
-  const players = Object.values(d.players||{});
-  if(players.length < 2){ showNotif('ต้องมีผู้เล่นอย่างน้อย 2 คน!','error'); return; }
+// ════════════════════════════════
+window.startGame=async()=>{
+  const snap=await get(roomRef);const d=snap.val();
+  const players=Object.values(d.players||{});
+  if(players.length<3){showNotif('ต้องมีผู้เล่นอย่างน้อย 3 คน!','error');return;}
 
-  const sp = shuffle([...players]);
-  const order = sp.map(p=>p.id);
-  const hands = {}; const alive = {};
+  const sp=sh([...players]);
+  const order=sp.map(p=>p.id);
+  const hands={},scores={},positions={};
 
-  const deck = buildDeck();
-  let dp = 0;
+  // Assign investor cards
+  const ia={};// color->playerId
+  if(players.length===3){
+    sp.forEach((p,i)=>{ia[COLORS[i*2]]=p.id;ia[COLORS[i*2+1]]=p.id;});
+  } else {
+    sp.forEach((p,i)=>{ia[COLORS[i]]=p.id;});
+    for(let i=players.length;i<6;i++)ia[COLORS[i]]='table';
+  }
 
-  // Deal 4 cards + 1 Defuse each (total 5)
-  sp.forEach(p => {
-    hands[p.id] = deck.slice(dp, dp+4).concat([{id:'defuse'}]);
-    dp += 4;
-    alive[p.id] = true;
-  });
-  let remDeck = deck.slice(dp);
+  const deck=buildInfluenceDeck();
+  let dp=0;
+  sp.forEach(p=>{hands[p.id]=deck.slice(dp,dp+5);dp+=5;scores[p.id]=0;positions[p.id]=0;});
+  const remDeck=deck.slice(dp);
 
-  // Add extra defuse cards back (3 extra)
-  for(let i=0;i<3;i++) remDeck.push({id:'defuse'});
-  // Add exploding kittens (players-1)
-  for(let i=0;i<players.length-1;i++) remDeck.push({id:'exploding'});
-  remDeck = shuffle(remDeck);
+  // Starting position — random
+  const startPos=Math.floor(Math.random()*BOARD_PATH.length);
 
-  await update(roomRef, {
-    status: 'playing', turnIdx: 0, playerOrder: order,
-    hands, alive, deck: remDeck, discard: [],
-    extraTurns: 0, lastCard: null,
-    pendingNope: null, chatMessages: {}
+  await update(roomRef,{
+    status:'playing',phase:'move',turnIdx:0,playerOrder:order,
+    scores,positions,startPos,hands,deck:remDeck,discard:[],
+    ia,traveling:{},stolen:{},
+    curProj:null,bossId:null,
+    negoOffers:{},negoResponses:{},dealClosed:false,
+    projDone:0,chatMessages:{}
   });
 };
 
-// ══════════════════════════════════════════
+// ════════════════════════════════
 // GAME RENDER
-// ══════════════════════════════════════════
-function renderGame(d, prev){
+// ════════════════════════════════
+function renderGame(d){
   ss('game');
-  const order = d.playerOrder || [];
-  const alive = d.alive || {};
-  const aliveOrder = order.filter(id => alive[id]);
-  const curId = aliveOrder[d.turnIdx % aliveOrder.length];
-  const isMyTurn = curId === myId;
-  const myAlive = alive[myId] !== false;
+  const order=d.playerOrder||[];
+  const curId=order[d.turnIdx%order.length];
+  const isMyTurn=curId===myId;
+  const curP=d.players[curId];
 
-  // Turn banner
-  const curP = d.players[curId];
-  gc('tname').textContent = (curP?.name||'?') + (isMyTurn ? ' (คุณ! 🎯)' : '');
-  gc('tname').style.color = isMyTurn ? 'var(--green)' : 'var(--yellow)';
-  gc('deck-count-disp').textContent = (d.deck||[]).length + ' ใบ';
-  gc('deck-num').textContent = (d.deck||[]).length;
+  gc('tname').textContent=(curP?.name||'?')+(isMyTurn?' (คุณ! 🎯)':'');
+  gc('tname').style.color=isMyTurn?'#4cdb7c':'var(--gold2)';
+  gc('pdone').textContent=d.projDone||0;
 
-  // Phase badge
-  const pb = gc('phase-badge');
-  if(isMyTurn){ pb.className='pbadge pb-play'; pb.textContent='เทิร์นคุณ 🎯'; }
-  else { pb.className='pbadge pb-wait'; pb.textContent='รอ...'; }
+  const phases={move:'ph-move',action:'ph-act',negotiate:'ph-nego',done:'ph-done'};
+  const phlbl={move:'🎲 เดิน',action:'⚡ เลือก',negotiate:'🤝 เจรจา',done:'✓ จบ'};
+  const pb=gc('pbadge');
+  pb.className='phase-badge '+(phases[d.phase]||'ph-done');
+  pb.textContent=phlbl[d.phase]||d.phase;
 
-  // Extra turns
-  const et = d.extraTurns||0;
-  if(et > 0 && isMyTurn){
-    gc('extra-turns-badge').style.display = 'block';
-    gc('extra-turns-n').textContent = et;
-  } else {
-    gc('extra-turns-badge').style.display = 'none';
-  }
-
-  // Discard top
-  const disc = d.discard||[];
-  if(disc.length > 0){
-    const top = disc[disc.length-1];
-    const def = CARD_DEFS[top.id];
-    gc('discard-icon').textContent = def?.icon || '?';
-    gc('discard-name').textContent = def?.name?.replace(/^./,'') || '?';
-  } else {
-    gc('discard-icon').textContent = '—'; gc('discard-name').textContent = 'ว่าง';
-  }
-
-  // Draw pile button — only clickable if my turn
-  gc('draw-pile-btn').style.opacity = isMyTurn && myAlive ? '1' : '0.5';
-  gc('draw-pile-btn').style.cursor = isMyTurn && myAlive ? 'pointer' : 'default';
-
-  renderHand(d, isMyTurn && myAlive);
-  renderSidebar(d);
+  renderBoard(d);
+  renderHand(d);
+  renderScoreboard(d);
+  renderSidePlayers(d);
+  renderMyInvestors(d);
+  renderActionArea(d,isMyTurn);
+  renderProjectPanel(d);
+  renderNegoPanel(d);
   renderChat(d);
 }
 
-function renderHand(d, canAct){
-  const hand = (d.hands||{})[myId] || [];
-  gc('hand-count').textContent = hand.length;
-  const area = gc('hand-area'); area.innerHTML = '';
+// ── Board render ──
+function renderBoard(d){
+  const grid=gc('bgrid');grid.innerHTML='';
+  // Build path positions on 10×8 grid (perimeter)
+  const pathPos=[];
+  for(let x=0;x<10;x++)pathPos.push([x,0]);          // top row
+  for(let y=1;y<=6;y++)pathPos.push([9,y]);           // right col
+  for(let x=8;x>=0;x--)pathPos.push([x,7]);           // bottom row
+  for(let y=6;y>=1;y--)pathPos.push([0,y]);           // left col
+  const posMap={};pathPos.forEach(([x,y],i)=>{posMap[`${x},${y}`]=i;});
 
-  hand.forEach((c, i) => {
-    const def = CARD_DEFS[c.id] || {};
-    const isSel = selectedCards.includes(i);
-    const el = document.createElement('div');
-    el.className = `play-card ct-${def.type||'cat'}${isSel?' selected':''}${!canAct?' disabled':''}`;
-    el.style.borderColor = def.color || 'var(--border)';
-    el.innerHTML = `<div class="card-icon">${def.icon||'?'}</div><div class="card-name">${(def.name||'').replace(/^[^\s]+\s/,'')}</div>`;
-    if(canAct && def.type !== 'exploding') el.onclick = () => toggleSelect(i, c, d, canAct);
+  // Pawns per cell
+  const pawns={};
+  Object.entries(d.positions||{}).forEach(([pid,pos])=>{
+    const ci=((pos)+BOARD_PATH.length)%BOARD_PATH.length;
+    if(!pawns[ci])pawns[ci]=[];
+    pawns[ci].push(pid);
+  });
+
+  for(let y=0;y<8;y++){
+    for(let x=0;x<10;x++){
+      const cell=document.createElement('div');
+      const key=`${x},${y}`;
+      if(posMap[key]!==undefined){
+        const pi=posMap[key];
+        const bc=BOARD_PATH[pi%BOARD_PATH.length];
+        cell.className=`bcell path-cell cc-${bc}`;
+        const lbl=bc==='draw'?'จั่ว':bc==='wild'?'★':CEMOJI[COLORS.indexOf(bc)]||'';
+        cell.innerHTML=`<span class="cell-lbl">${lbl}</span>`;
+        if(pawns[pi]){
+          const pw=document.createElement('div');
+          pw.style.cssText='display:flex;flex-wrap:wrap;justify-content:center;gap:1px;';
+          pawns[pi].forEach(pid=>{
+            const p=d.players[pid];const pawn=document.createElement('div');
+            pawn.className='pawn';
+            pawn.style.background=colorStyle(COLORS[p?.ci||0]);
+            pw.appendChild(pawn);
+          });
+          cell.appendChild(pw);
+        }
+      } else if(x>=3&&x<=6&&y>=2&&y<=5){
+        cell.className='bcell center-cell';
+        if(x===4&&y===3){
+          cell.style.cssText='grid-column:5/8;grid-row:4/6;font-family:"Bebas Neue",cursive;font-size:.75rem;color:var(--gold2);letter-spacing:1px;text-align:center;padding:4px;';
+          cell.textContent="I'M THE BOSS";
+        }
+      } else {
+        cell.className='bcell';
+      }
+      cell.style.gridColumn=x+1;
+      cell.style.gridRow=y+1;
+      grid.appendChild(cell);
+    }
+  }
+}
+
+// ── Hand ──
+function renderHand(d){
+  const hand=(d.hands||{})[myId]||[];
+  gc('hcount').textContent=hand.length;
+  const area=gc('harea');area.innerHTML='';
+  const canPlay=d.phase==='negotiate'&&!!d.bossId;
+
+  hand.forEach((c,i)=>{
+    const el=document.createElement('div');
+    const isSel=selIdx===i;
+    el.className=`icard ic-${c.t}${isSel?' sel':''}${!canPlay?' dis':''}`;
+    el.title=cardDesc(c);
+    el.innerHTML=`<div class="card-ico">${cardIcon(c)}</div>
+      <div class="card-lbl" style="color:${cardColor(c)}">${cardLabel(c)}</div>
+      ${c.c&&c.c!=='any'&&c.c!=='wild'?`<div class="card-sub">${CEMOJI[COLORS.indexOf(c.c)]||''} ${CNAME[COLORS.indexOf(c.c)]||''}</div>`:''}`;
+    if(canPlay)el.onclick=()=>{selIdx=selIdx===i?null:i;selCard=selIdx===null?null:c;renderHand(d);};
     area.appendChild(el);
   });
+  gc('cardact').style.display=selIdx!==null&&canPlay?'flex':'none';
+}
+function cardIcon(c){return c.t==='travel'?'✈️':c.t==='boss'?'👑':c.t==='recruit'?'🤝':'🛑';}
+function cardLabel(c){return c.t==='travel'?'Travel':c.t==='boss'?'Boss':c.t==='recruit'?'Recruit':'Stop';}
+function cardColor(c){return c.t==='travel'?'#ff7060':c.t==='boss'?'var(--gold2)':c.t==='recruit'?'#c080ff':'#60a0ff';}
+function cardDesc(c){
+  if(c.t==='travel')return c.c==='wild'?'ส่งใครก็ได้ไปท่องเที่ยว':`ส่ง ${CNAME[COLORS.indexOf(c.c)]} ไปท่องเที่ยว`;
+  if(c.t==='boss')return 'แย่งเป็น Boss ทันที';
+  if(c.t==='recruit')return 'ขโมยนักลงทุน (ต้องใช้ 3 ใบ)';
+  return 'ยกเลิกการ์ดก่อนหน้า';
+}
+window.clearSel=()=>{selIdx=null;selCard=null;if(gs)renderHand(gs);};
 
-  // Combo bar
-  const comboBar = gc('combo-bar');
-  const catSel = selectedCards.map(i=>hand[i]).filter(c=>c&&CARD_DEFS[c.id]?.type==='cat');
-  if(catSel.length > 0 && canAct){
-    comboBar.classList.add('show');
-    gc('combo-count').textContent = catSel.length;
-  } else { comboBar.classList.remove('show'); }
-
-  // Play button
-  gc('play-sel-btn').style.display = selectedCards.length > 0 && canAct ? 'block' : 'none';
+// ── Scoreboard ──
+function renderScoreboard(d){
+  const players=Object.values(d.players||{});
+  const scores=d.scores||{};
+  const sb=gc('scoreboard');sb.innerHTML='';
+  players.sort((a,b)=>(scores[b.id]||0)-(scores[a.id]||0)).forEach((p,i)=>{
+    const cc=COLORS[p.ci||0];
+    const row=document.createElement('div');
+    row.className='score-row'+(i===0?' lead':'');
+    row.innerHTML=`<div style="display:flex;align-items:center;gap:8px">
+      <span class="dot dot-${cc}"></span>${p.name}${p.id===myId?' (คุณ)':''}
+      ${p.id===d.bossId?'<span style="font-size:.7rem">👑</span>':''}
+    </div>
+    <div class="score-money">฿${((scores[p.id]||0)/10000).toFixed(1)}หมื่น</div>`;
+    sb.appendChild(row);
+  });
 }
 
-function toggleSelect(i, c, d, canAct){
-  if(!canAct) return;
-  const hand = (d.hands||{})[myId]||[];
-  const def = CARD_DEFS[c.id];
-  if(!def || def.type === 'exploding') return;
+// ── Side players ──
+function renderSidePlayers(d){
+  const players=Object.values(d.players||{});
+  const list=gc('gplayers');list.innerHTML='';
+  const ia=d.ia||{};
+  players.forEach(p=>{
+    const cc=COLORS[p.ci||0];
+    const myInv=COLORS.filter(c=>ia[c]===p.id);
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.82rem;';
+    div.innerHTML=`<span style="color:${colorStyle(cc)}">${PEMOJI[p.ci||0]}</span>
+      <span style="flex:1">${p.name}${p.id===myId?' (คุณ)':''}</span>
+      <span style="font-size:.8rem">${myInv.map(c=>CEMOJI[COLORS.indexOf(c)]).join('')}</span>`;
+    list.appendChild(div);
+  });
+}
 
-  if(selectedCards.includes(i)){
-    selectedCards = selectedCards.filter(x=>x!==i);
-  } else {
-    // Cat cards: can select multiple same cat
-    if(def.type === 'cat'){
-      const catSel = selectedCards.map(j=>hand[j]).filter(cc=>cc&&CARD_DEFS[cc.id]?.type==='cat');
-      if(catSel.length > 0 && catSel[0].id !== c.id){
-        showNotif('ต้องเลือกการ์ดแมวชนิดเดียวกัน!','error'); return;
-      }
-      if(selectedCards.length >= 2){ showNotif('เลือกได้แค่ 2 ใบ!','error'); return; }
-      selectedCards.push(i);
-    } else {
-      // Non-cat: only 1 at a time
-      selectedCards = [i];
-    }
+// ── My investors ──
+function renderMyInvestors(d){
+  const ia=d.ia||{};
+  const stolen=d.stolen||{};
+  const myInv=COLORS.filter(c=>(stolen[c]||ia[c])===myId);
+  const el=gc('my-investors');el.innerHTML='';
+  if(myInv.length===0){el.innerHTML='<div style="color:var(--aged);font-size:.78rem">ยังไม่มีนักลงทุน</div>';return;}
+  const row=document.createElement('div');row.className='my-investors';
+  myInv.forEach(c=>{
+    const b=document.createElement('div');
+    b.className=`inv-badge c-${c} bc-${c} bg-${c}`;
+    b.innerHTML=`${CEMOJI[COLORS.indexOf(c)]} ${CNAME[COLORS.indexOf(c)]}`;
+    row.appendChild(b);
+  });
+  el.appendChild(row);
+}
+
+// ── Action area ──
+function renderActionArea(d,isMyTurn){
+  const area=gc('aarea');area.innerHTML='';
+  if(d.phase==='move'&&isMyTurn){
+    const div=document.createElement('div');div.className='panel';
+    div.innerHTML=`<div class="ptitle">🎲 ทอยลูกเต๋า</div>
+      <div class="darea">
+        <div class="dice-face" id="dface">🎲</div>
+        <div>
+          <div style="font-size:.8rem;color:var(--aged);margin-bottom:7px">ถึงเทิร์นของคุณแล้ว!</div>
+          <button class="btn btn-gold" onclick="rollDice()">🎲 ทอยเลย</button>
+        </div>
+      </div>`;
+    area.appendChild(div);
   }
-  renderHand(d, canAct);
-}
-
-function renderSidebar(d){
-  const players = Object.values(d.players||{});
-  const order = d.playerOrder||[];
-  const alive = d.alive||{};
-  const aliveOrder = order.filter(id=>alive[id]);
-  const curId = aliveOrder[d.turnIdx % aliveOrder.length];
-  const sb = gc('players-sidebar'); sb.innerHTML = '';
-
-  order.forEach(pid => {
-    const p = d.players[pid]; if(!p) return;
-    const isCur = pid === curId;
-    const isDead = !alive[pid];
-    const handCount = ((d.hands||{})[pid]||[]).length;
-    const el = document.createElement('div');
-    el.className = `player-info${isCur?' current-turn':''}${isDead?' dead':''}`;
-    el.innerHTML = `<div class="pi-icon">${isDead?'💀':PLAYER_EMOJI[p.ci||0]}</div>
-      <div>
-        <div class="pi-name" style="color:${PLAYER_COLORS[p.ci||0]}">${p.name}${pid===myId?' (คุณ)':''}</div>
-        <div class="pi-cards">${isDead?'💀 ออกแล้ว':`🃏 ${handCount} ใบในมือ`}</div>
+  if(d.phase==='action'&&isMyTurn){
+    const pos=(d.positions||{})[myId]||0;
+    const cellColor=BOARD_PATH[((pos%BOARD_PATH.length)+BOARD_PATH.length)%BOARD_PATH.length];
+    const cellName=cellColor==='draw'?'🃏 จั่วการ์ด':cellColor==='wild'?'⭐ พิเศษ':`${CEMOJI[COLORS.indexOf(cellColor)]} ${CNAME[COLORS.indexOf(cellColor)]}`;
+    const div=document.createElement('div');div.className='panel';
+    div.innerHTML=`<div class="ptitle">⚡ เลือกกิจกรรม</div>
+      <div style="font-size:.82rem;color:var(--aged);margin-bottom:12px">
+        ช่องปัจจุบัน: <strong style="color:var(--paper)">${cellName}</strong>
       </div>
-      ${isCur?'<span class="pi-badge pbadge pb-play">🎯</span>':''}`;
-    sb.appendChild(el);
+      <div class="brow">
+        <button class="btn btn-gold" onclick="chooseNego()">🤝 เจรจาธุรกิจ</button>
+        <button class="btn btn-out" onclick="chooseDraw()">🃏 จั่วการ์ด 3 ใบ</button>
+      </div>`;
+    area.appendChild(div);
+  }
+}
+
+// ── Project panel ──
+function renderProjectPanel(d){
+  const panel=gc('ppanel');
+  if(!d.curProj){panel.style.display='none';return;}
+  panel.style.display='block';
+  const proj=d.curProj;
+  const ia=d.ia||{};const stolen=d.stolen||{};const traveling=d.traveling||{};
+  let slots='';
+
+  // Required investors
+  (proj.inv||[]).forEach(c=>{
+    const owner=stolen[c]||ia[c];
+    const isHere=owner&&owner!=='table';
+    const isTrav=traveling[c];
+    const isStolen=stolen[c]&&stolen[c]!==ia[c];
+    const cls=['inv-slot',`c-${c}`,`bc-${c}`,`bg-${c}`,
+      isHere&&!isTrav?'present':'',isTrav?'traveling':isStolen?'stolen':'',!isHere?'absent':''].join(' ');
+    slots+=`<div class="${cls}" title="${CNAME[COLORS.indexOf(c)]} นักลงทุน">${CEMOJI[COLORS.indexOf(c)]}</div>`;
   });
-}
-
-// ══════════════════════════════════════════
-// ACTIONS
-// ══════════════════════════════════════════
-window.playSelected = async () => {
-  if(selectedCards.length === 0) return;
-  const hand = [...((gs.hands||{})[myId]||[])];
-  const cards = selectedCards.map(i=>hand[i]);
-  const def = CARD_DEFS[cards[0].id];
-
-  if(!def) return;
-
-  // Cat combo (2 matching cats)
-  if(def.type === 'cat'){
-    if(selectedCards.length < 2){ showNotif('ต้องเลือก 2 ใบ (คู่)!','error'); return; }
-    if(cards[0].id !== cards[1].id){ showNotif('ต้องเป็นการ์ดแมวชนิดเดียวกัน!','error'); return; }
-    showStealModal();
-    return;
-  }
-
-  // Single card
-  const card = cards[0];
-  const idx = selectedCards[0];
-  selectedCards = [];
-
-  // Remove from hand
-  const newHand = hand.filter((_,i)=>i!==idx);
-  const newDiscard = [...(gs.discard||[]), card];
-
-  if(def.type === 'nope'){ showNotif('Nope ใช้ได้เฉพาะตอบโต้การ์ดคนอื่น!','error'); selectedCards=[]; renderHand(gs,true); return; }
-  if(def.type === 'defuse'){ showNotif('Defuse ใช้เฉพาะเมื่อจั่วแมวระเบิด!','error'); selectedCards=[]; renderHand(gs,true); return; }
-
-  await update(ref(db,'rooms2/'+roomCode), {[`hands/${myId}`]: newHand, discard: newDiscard});
-
-  if(def.type === 'skip'){
-    addLog(`⏭️ ${gs.players[myId]?.name} Skip`, 'lg-act');
-    await endTurnSkip();
-  } else if(def.type === 'attack'){
-    addLog(`⚔️ ${gs.players[myId]?.name} Attack!`, 'lg-act');
-    await doAttack();
-  } else if(def.type === 'shuffle'){
-    addLog(`🔀 ${gs.players[myId]?.name} Shuffle`, 'lg-act');
-    await doShuffle();
-  } else if(def.type === 'seefuture'){
-    addLog(`🔮 ${gs.players[myId]?.name} See Future`, 'lg-act');
-    doSeeFuture();
-  }
-};
-
-async function doAttack(){
-  const order = gs.playerOrder||[];
-  const alive = gs.alive||{};
-  const aliveOrder = order.filter(id=>alive[id]);
-  // End current turn, next player takes 2 turns
-  const nextIdx = (gs.turnIdx + 1) % aliveOrder.length;
-  const curExtra = gs.extraTurns||0;
-  await update(ref(db,'rooms2/'+roomCode), { turnIdx: nextIdx, extraTurns: (curExtra + 2) });
-}
-
-async function endTurnSkip(){
-  const order = gs.playerOrder||[];
-  const alive = gs.alive||{};
-  const aliveOrder = order.filter(id=>alive[id]);
-  const extra = gs.extraTurns||0;
-  if(extra > 1){
-    await update(ref(db,'rooms2/'+roomCode), { extraTurns: extra-1 });
-  } else {
-    const next = (gs.turnIdx + 1) % aliveOrder.length;
-    await update(ref(db,'rooms2/'+roomCode), { turnIdx: next, extraTurns: 0 });
-  }
-}
-
-async function doShuffle(){
-  const deck = shuffle([...(gs.deck||[])]);
-  await update(ref(db,'rooms2/'+roomCode), { deck });
-  showNotif('🔀 สับไพ่ใหม่แล้ว!');
-}
-
-function doSeeFuture(){
-  const deck = gs.deck||[];
-  const top3 = deck.slice(0,3);
-  const fc = gc('future-cards'); fc.innerHTML = '';
-  top3.forEach((c,i) => {
-    const def = CARD_DEFS[c.id]||{};
-    const el = document.createElement('div');
-    el.className = `future-card ct-${def.type||'cat'}`;
-    el.style.borderColor = def.color||'var(--border)';
-    el.innerHTML = `<div style="font-size:1.8rem">${def.icon||'?'}</div><div style="font-size:.65rem;color:var(--muted)">#${i+1}</div>`;
-    fc.appendChild(el);
-  });
-  if(top3.length === 0) fc.innerHTML = '<div style="color:var(--muted)">ไพ่หมด!</div>';
-  om('m-future');
-}
-
-// ══════════════════════════════════════════
-// DRAW CARD (End turn)
-// ══════════════════════════════════════════
-window.drawCard = async () => {
-  const order = gs.playerOrder||[];
-  const alive = gs.alive||{};
-  const aliveOrder = order.filter(id=>alive[id]);
-  const curId = aliveOrder[gs.turnIdx % aliveOrder.length];
-  if(curId !== myId){ showNotif('ยังไม่ใช่เทิร์นคุณ!','error'); return; }
-  if(!alive[myId]){ showNotif('คุณออกไปแล้ว!','error'); return; }
-
-  let deck = [...(gs.deck||[])];
-  if(deck.length === 0){ showNotif('ไพ่หมด!','error'); return; }
-
-  const drawn = deck.shift();
-  const def = CARD_DEFS[drawn.id];
-  selectedCards = [];
-
-  if(drawn.id === 'exploding'){
-    // Check for defuse in hand
-    const hand = [...((gs.hands||{})[myId]||[])];
-    const defuseIdx = hand.findIndex(c=>c.id==='defuse');
-    if(defuseIdx !== -1){
-      // Use defuse
-      hand.splice(defuseIdx,1);
-      addLog(`🧨 ${gs.players[myId]?.name} จั่วแมวระเบิด! แต่มี Defuse รอด!`, 'lg-df');
-      showNotif('💥 จั่วแมวระเบิด! ใช้ Defuse รอดแล้ว! 🧨','success');
-      await update(ref(db,'rooms2/'+roomCode), {[`hands/${myId}`]: hand, deck,
-        discard:[...(gs.discard||[]),{id:'defuse'}]});
-      // Show placement modal
-      showPlaceModal(deck.length);
-    } else {
-      // DEAD
-      addLog(`💣 ${gs.players[myId]?.name} ระเบิด!! 💀`, 'lg-ex');
-      gc('exp-text').textContent = gs.players[myId]?.name + ' ระเบิด! 💥';
-      gc('exp-overlay').classList.add('show');
-      // Discard all cards
-      const myHand = (gs.hands||{})[myId]||[];
-      const newAlive = {...alive, [myId]: false};
-      await update(ref(db,'rooms2/'+roomCode), {
-        deck, [`alive/${myId}`]: false,
-        discard:[...(gs.discard||[]),...myHand,drawn],
-        [`hands/${myId}`]: []
-      });
-      // Check win
-      const stillAlive = aliveOrder.filter(id=>id!==myId);
-      if(stillAlive.length === 1){
-        await update(ref(db,'rooms2/'+roomCode), {status:'ended', winner: stillAlive[0]});
-        return;
-      }
-      const nextIdx = gs.turnIdx % stillAlive.length;
-      await update(ref(db,'rooms2/'+roomCode), { turnIdx: nextIdx, extraTurns:0 });
-    }
-  } else {
-    // Normal draw — add to hand, end turn
-    const hand = [...((gs.hands||{})[myId]||[]), drawn];
-    addLog(`🃏 ${gs.players[myId]?.name} จั่วการ์ด`, 'lg-info');
-    const extra = gs.extraTurns||0;
-    let newIdx, newExtra;
-    if(extra > 1){ newIdx = gs.turnIdx; newExtra = extra-1; }
-    else { newIdx = (gs.turnIdx+1)%aliveOrder.length; newExtra = 0; }
-    await update(ref(db,'rooms2/'+roomCode), {
-      [`hands/${myId}`]: hand, deck, turnIdx: newIdx, extraTurns: newExtra
+  if(proj.ch){
+    slots+='<span style="color:var(--aged);font-size:.75rem;margin:0 4px">หรือ</span>';
+    proj.ch.forEach(c=>{
+      slots+=`<div class="inv-slot choice c-${c} bc-${c} bg-${c}" title="${CNAME[COLORS.indexOf(c)]} (เลือกได้)">${CEMOJI[COLORS.indexOf(c)]}</div>`;
     });
-    showNotif(`จั่ว ${def?.name||'?'}`);
+  }
+
+  gc('pcontent').innerHTML=`<div class="proj-card">
+    <div class="proj-num">โครงการที่ ${proj.id}</div>
+    <div class="proj-val">฿${proj.v.toLocaleString()}</div>
+    <div style="font-size:.68rem;color:var(--aged);margin-top:8px;margin-bottom:4px">นักลงทุนที่ต้องการ</div>
+    <div class="proj-investors">${slots}</div>
+  </div>`;
+}
+
+// ── Negotiation panel ──
+function renderNegoPanel(d){
+  const panel=gc('nego-panel');
+  if(d.phase!=='negotiate'||!d.bossId){panel.style.display='none';return;}
+  panel.style.display='block';
+
+  const proj=d.curProj;
+  const ia=d.ia||{};const stolen=d.stolen||{};const traveling=d.traveling||{};
+  const offers=d.negoOffers||{};
+  const responses=d.negoResponses||{};
+  const isBoss=d.bossId===myId;
+  const total=proj?.v||0;
+
+  // Participants: everyone who owns a required investor (and isn't boss, isn't traveling)
+  const participants=[];
+  if(proj){
+    const allInv=[...(proj.inv||[]),...(proj.ch||[])];
+    allInv.forEach(c=>{
+      const owner=stolen[c]||ia[c];
+      if(owner&&owner!=='table'&&owner!==d.bossId&&!traveling[c]){
+        if(!participants.includes(owner))participants.push(owner);
+      }
+    });
+  }
+
+  // Build table
+  const bossP=d.players[d.bossId];
+  const bossCC=COLORS[bossP?.ci||0];
+  let given=participants.reduce((s,pid)=>{
+    const r=responses[pid];
+    const amt=r?.status==='accept'?(offers[pid]||0):r?.status==='counter'?(r.amount||0):(offers[pid]||0);
+    return s+amt;
+  },0);
+  const bossGets=Math.max(0,total-given);
+
+  let rows=`<div class="nego-row">
+    <div class="nego-pname"><span class="dot dot-${bossCC}"></span><strong>${bossP?.name||'?'}</strong></div>
+    <span class="ns ns-boss">👑 Boss</span>
+    <div class="nego-amount">฿${bossGets.toLocaleString()}</div>
+  </div>`;
+
+  participants.forEach(pid=>{
+    const p=d.players[pid];const cc=COLORS[p?.ci||0];
+    const offer=offers[pid]||0;const resp=responses[pid];
+    let ns='',amtStr=`฿${offer.toLocaleString()}`;
+    if(!resp||resp.status==='pending')ns=`<span class="ns ns-pending">รอ...</span>`;
+    else if(resp.status==='accept')ns=`<span class="ns ns-accept">✅ รับ</span>`;
+    else if(resp.status==='reject')ns=`<span class="ns ns-reject">❌ ปฏิเสธ</span>`;
+    else if(resp.status==='counter')ns=`<span class="ns ns-counter">💬 ขอ ฿${(resp.amount||0).toLocaleString()}</span>`;
+    rows+=`<div class="nego-row">
+      <div class="nego-pname"><span class="dot dot-${cc}"></span>${p?.name||'?'}${pid===myId?' (คุณ)':''} ${ns}</div>
+      <div class="nego-amount">${amtStr}</div>
+    </div>`;
+  });
+
+  gc('nego-content').innerHTML=`<div class="nego-wrap">
+    <div class="nego-header">การแบ่งเงิน · โครงการ #${proj?.id||'?'} · รวม ฿${total.toLocaleString()}</div>
+    ${rows}
+  </div>`;
+
+  // My response
+  const myRespEl=gc('my-response');
+  if(!isBoss&&participants.includes(myId)&&!d.dealClosed){
+    const myOffer=offers[myId]||0;const myResp=responses[myId];
+    myRespEl.style.display='block';
+    if(!myResp||myResp.status==='pending'){
+      myRespEl.innerHTML=`<div class="my-deal-box">
+        <div style="font-size:.72rem;color:var(--aged);letter-spacing:1px">Boss เสนอให้คุณ</div>
+        <div class="my-offer-big">฿${myOffer.toLocaleString()}</div>
+        <div class="brow" style="justify-content:center;margin-bottom:12px">
+          <button class="btn btn-green btn-sm" onclick="respond('accept')">✅ รับดีล</button>
+          <button class="btn btn-red btn-sm" onclick="respond('reject')">❌ ปฏิเสธ</button>
+        </div>
+        <div style="font-size:.75rem;color:var(--aged);margin-bottom:6px">หรือต่อรอง — พิมพ์จำนวนที่ต้องการ:</div>
+        <div style="display:flex;gap:7px">
+          <input type="number" id="ctr-amt" min="0" max="${total}" step="10000" placeholder="เช่น 50000" class="boss-offer-input">
+          <button class="btn btn-blue btn-sm" onclick="respond('counter')">💬 ต่อรอง</button>
+        </div>
+      </div>`;
+    } else {
+      const txt={accept:'✅ คุณรับดีลแล้ว',reject:'❌ คุณปฏิเสธแล้ว',counter:`💬 คุณขอ ฿${(myResp.amount||0).toLocaleString()}`};
+      myRespEl.innerHTML=`<div style="text-align:center;padding:10px;color:var(--aged);font-size:.84rem">${txt[myResp.status]||''} — รอ Boss ตัดสินใจ</div>`;
+    }
+  } else {myRespEl.style.display='none';}
+
+  // Boss controls
+  const bossCtrlEl=gc('boss-controls');
+  if(isBoss){
+    bossCtrlEl.style.display='block';
+    let inputs='';
+    participants.forEach(pid=>{
+      const p=d.players[pid];const cc=COLORS[p?.ci||0];
+      const resp=responses[pid];
+      const counterAmt=resp?.status==='counter'?resp.amount:null;
+      inputs+=`<div style="margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+          <span class="dot dot-${cc}"></span>
+          <span style="font-size:.82rem">${p?.name||'?'}</span>
+          ${counterAmt!==null?`<span class="ns ns-counter">ต้องการ ฿${counterAmt.toLocaleString()}</span>`:''}
+        </div>
+        <input type="number" id="off-${pid}" min="0" max="${total}" step="10000"
+          value="${offers[pid]||0}" class="boss-offer-input"
+          oninput="calcBossCut(${total},'${JSON.stringify(participants).replace(/'/g,'&apos;')}')">
+      </div>`;
+    });
+
+    bossCtrlEl.innerHTML=`<div style="background:rgba(0,0,0,.3);border:1px solid rgba(200,150,26,.15);border-radius:3px;padding:14px">
+      <div class="ptitle" style="font-size:.9rem;margin-bottom:12px">⚙️ Boss — ปรับข้อเสนอ</div>
+      ${inputs}
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:9px;background:rgba(0,0,0,.3);border-radius:3px;margin-bottom:12px">
+        <span style="font-size:.76rem;color:var(--aged)">คุณ (Boss) ได้รับ</span>
+        <span id="boss-cut" style="font-family:'Bebas Neue',cursive;font-size:1.3rem;color:var(--gold2)">฿${total.toLocaleString()}</span>
+      </div>
+      <div class="brow">
+        <button class="btn btn-gold btn-sm" onclick="sendOffer(${total},'${JSON.stringify(participants).replace(/'/g,'&apos;')}')">📤 ส่งข้อเสนอ</button>
+        <button class="btn btn-green btn-sm" onclick="closeDeal(${total},'${JSON.stringify(participants).replace(/'/g,'&apos;')}')">✅ ปิดดีล</button>
+        <button class="btn btn-red btn-sm" onclick="declareFail()">❌ ล้มเหลว</button>
+      </div>
+    </div>`;
+    calcBossCut(total,JSON.stringify(participants));
+  } else {bossCtrlEl.style.display='none';}
+}
+
+window.calcBossCut=(total,participantsJson)=>{
+  let participants;try{participants=JSON.parse(participantsJson);}catch{return;}
+  let given=0;
+  participants.forEach(pid=>{given+=parseInt(gc('off-'+pid)?.value||0)||0;});
+  const cut=total-given;
+  const el=gc('boss-cut');
+  if(el){el.textContent='฿'+Math.max(0,cut).toLocaleString();el.style.color=cut<0?'var(--red)':'var(--gold2)';}
+};
+
+// ════════════════════════════════
+// GAME ACTIONS
+// ════════════════════════════════
+window.rollDice=async()=>{
+  const r=Math.ceil(Math.random()*6);
+  const faces=['','⚀','⚁','⚂','⚃','⚄','⚅'];
+  const df=gc('dface');if(df){df.classList.add('rolling');setTimeout(()=>df.classList.remove('rolling'),400);}
+  const curPos=(gs.positions||{})[myId]||0;
+  const newPos=(curPos+r)%BOARD_PATH.length;
+  await update(ref(db,'boss3/'+roomCode),{[`positions/${myId}`]:newPos,phase:'action',lastDice:r});
+  addLog(`🎲 ${gs.players[myId]?.name} ทอยได้ ${r} ${faces[r]} ไปช่อง ${BOARD_PATH[newPos]}`,'lg');
+};
+
+window.chooseNego=async()=>{
+  if((gs.projDone||0)>=15){showNotif('โครงการหมดแล้ว!','error');return;}
+  const projIdx=gs.projDone||0;
+  const proj=PROJECTS[projIdx];
+  if(!proj){showNotif('โครงการหมด!','error');return;}
+
+  // Build initial offers
+  const ia=gs.ia||{};const traveling=gs.traveling||{};
+  const allInv=[...(proj.inv||[]),...(proj.ch||[])];
+  const initOffers={};const initResp={};
+  allInv.forEach(c=>{
+    const owner=ia[c];
+    if(owner&&owner!=='table'&&owner!==myId&&!traveling[c]&&!initOffers[owner]){
+      initOffers[owner]=0;initResp[owner]={status:'pending',amount:0};
+    }
+  });
+
+  await update(ref(db,'boss3/'+roomCode),{
+    phase:'negotiate',curProj:proj,bossId:myId,
+    negoOffers:initOffers,negoResponses:initResp,dealClosed:false,
+    traveling:{},stolen:{}
+  });
+  addLog(`👑 ${gs.players[myId]?.name} เป็น Boss · โครงการ #${proj.id} ฿${proj.v.toLocaleString()}`,'lg');
+};
+
+window.chooseDraw=async()=>{
+  let hand=[...((gs.hands||{})[myId]||[])];
+  let deck=[...(gs.deck||[])];const discard=[...(gs.discard||[])];
+  let drew=0;
+  for(let i=0;i<3&&hand.length<12;i++){
+    if(deck.length===0)deck=sh([...discard]);
+    if(deck.length>0){hand.push(deck.shift());drew++;}
+  }
+  await update(ref(db,'boss3/'+roomCode),{[`hands/${myId}`]:hand,deck,phase:'done'});
+  addLog(`🃏 ${gs.players[myId]?.name} จั่วการ์ด ${drew} ใบ`);
+  await endTurn();
+};
+
+// ── Respond to offer ──
+window.respond=async(status)=>{
+  let amount=0;
+  if(status==='counter'){
+    amount=parseInt(gc('ctr-amt')?.value||0)||0;
+    if(amount<=0){showNotif('ใส่จำนวนที่ต้องการ!','error');return;}
+  } else if(status==='accept'){
+    amount=(gs.negoOffers||{})[myId]||0;
+  }
+  await update(ref(db,'boss3/'+roomCode+'/negoResponses/'+myId),{status,amount});
+  const lbl={accept:'✅ รับดีล',reject:'❌ ปฏิเสธ',counter:`💬 ขอ ฿${amount.toLocaleString()}`};
+  const cls={accept:'lgg',reject:'lr',counter:'lb'};
+  addLog(`${gs.players[myId]?.name} ${lbl[status]}`,cls[status]);
+};
+
+// ── Boss send offer ──
+window.sendOffer=async(total,participantsJson)=>{
+  let participants;try{participants=JSON.parse(participantsJson);}catch{return;}
+  const offers={};let given=0;
+  participants.forEach(pid=>{const v=parseInt(gc('off-'+pid)?.value||0)||0;offers[pid]=v;given+=v;});
+  if(given>total){showNotif('เงินเกินมูลค่าโครงการ!','error');return;}
+  const responses={};
+  participants.forEach(pid=>{responses[pid]={status:'pending',amount:offers[pid]};});
+  await update(ref(db,'boss3/'+roomCode),{negoOffers:offers,negoResponses:responses});
+  addLog('📤 Boss ส่งข้อเสนอใหม่','lg');
+  showNotif('ส่งข้อเสนอแล้ว · รอการตอบรับ','success');
+};
+
+// ── Close deal ──
+window.closeDeal=async(total,participantsJson)=>{
+  let participants;try{participants=JSON.parse(participantsJson);}catch{return;}
+  const resp=gs.negoResponses||{};
+  const notAcc=participants.filter(pid=>resp[pid]?.status!=='accept');
+  if(notAcc.length>0){
+    const names=notAcc.map(pid=>gs.players[pid]?.name||'?').join(', ');
+    showNotif(`${names} ยังไม่ยอมรับ!`,'error');return;
+  }
+  const scores={...(gs.scores||{})};
+  const offers=gs.negoOffers||{};
+  let given=0;
+  participants.forEach(pid=>{const amt=offers[pid]||0;scores[pid]=(scores[pid]||0)+amt;given+=amt;});
+  scores[myId]=(scores[myId]||0)+(total-given);
+  const done=(gs.projDone||0)+1;
+  addLog(`✅ ปิดดีล! โครงการ ${done}/15 · Boss ได้ ฿${(total-given).toLocaleString()}`,'lgg');
+
+  const bossLeftOf=getBossLeftNeighbor();
+  if(done>=15){
+    await update(ref(db,'boss3/'+roomCode),{scores,projDone:done,status:'ended'});
+  } else {
+    await update(ref(db,'boss3/'+roomCode),{scores,projDone:done,phase:'done',dealClosed:true});
+    await endTurnTo(bossLeftOf);
   }
 };
 
-// ══════════════════════════════════════════
-// PLACE KITTEN BACK
-// ══════════════════════════════════════════
-function showPlaceModal(deckLen){
-  const opts = gc('place-opts'); opts.innerHTML = '';
-  const grid = document.createElement('div'); grid.className = 'pos-grid';
-  const positions = ['บนสุด (อันดับ 1)', '1/4 จากบน', 'กลางกอง', '3/4 จากบน', 'ล่างสุด'];
-  const posIdx = [0, Math.floor(deckLen*.25), Math.floor(deckLen*.5), Math.floor(deckLen*.75), deckLen];
-  positions.forEach((label, i) => {
-    const btn = document.createElement('div');
-    btn.className = 'pos-btn';
-    btn.innerHTML = `<div>${label}</div><div style="font-size:.65rem;color:var(--muted)">ตำแหน่ง ${posIdx[i]+1}</div>`;
-    btn.onclick = () => placeKitten(posIdx[i]);
-    grid.appendChild(btn);
+function getBossLeftNeighbor(){
+  const order=gs.playerOrder||[];
+  const bossIdx=order.indexOf(gs.bossId);
+  return order[(bossIdx+1)%order.length];
+}
+
+window.declareFail=async()=>{
+  const done=(gs.projDone||0)+1;
+  addLog(`❌ การเจรจาล้มเหลว · โครงการ ${done}/15`,'lr');
+  if(done>=15){await update(ref(db,'boss3/'+roomCode),{projDone:done,status:'ended'});}
+  else{
+    await update(ref(db,'boss3/'+roomCode),{projDone:done,phase:'done'});
+    await endTurn();
+  }
+};
+
+async function endTurn(){
+  const order=gs.playerOrder||[];
+  const next=((gs.turnIdx||0)+1)%order.length;
+  await update(ref(db,'boss3/'+roomCode),{
+    phase:'move',turnIdx:next,curProj:null,bossId:null,
+    negoOffers:{},negoResponses:{},dealClosed:false,traveling:{},stolen:{}
   });
-  opts.appendChild(grid);
-  om('m-place');
 }
-
-async function placeKitten(pos){
-  cm('m-place');
-  let deck = [...(gs.deck||[])];
-  const realPos = Math.min(pos, deck.length);
-  deck.splice(realPos, 0, {id:'exploding'});
-  addLog(`🧨 ${gs.players[myId]?.name} วางแมวระเบิดกลับไปในกอง`,'lg-df');
-  // End turn
-  const order = gs.playerOrder||[];
-  const alive = gs.alive||{};
-  const aliveOrder = order.filter(id=>alive[id]);
-  const extra = gs.extraTurns||0;
-  let newIdx, newExtra;
-  if(extra > 1){ newIdx = gs.turnIdx; newExtra = extra-1; }
-  else { newIdx = (gs.turnIdx+1)%aliveOrder.length; newExtra = 0; }
-  await update(ref(db,'rooms2/'+roomCode), { deck, turnIdx: newIdx, extraTurns: newExtra });
-}
-
-// ══════════════════════════════════════════
-// CAT STEAL
-// ══════════════════════════════════════════
-function showStealModal(){
-  const order = gs.playerOrder||[];
-  const alive = gs.alive||{};
-  const opts = gc('steal-opts'); opts.innerHTML = '';
-  order.filter(id=>id!==myId&&alive[id]).forEach(pid=>{
-    const p = gs.players[pid]; if(!p) return;
-    const hc = ((gs.hands||{})[pid]||[]).length;
-    const btn = document.createElement('button');
-    btn.className = 'btn btn-out'; btn.style.width='100%'; btn.style.marginBottom='7px';
-    btn.innerHTML = `${PLAYER_EMOJI[p.ci||0]} ${p.name} (${hc} ใบ)`;
-    btn.onclick = () => stealFromPlayer(pid);
-    opts.appendChild(btn);
-  });
-  om('m-steal');
-}
-
-async function stealFromPlayer(targetId){
-  cm('m-steal');
-  const hand = [...((gs.hands||{})[myId]||[])];
-  const targetHand = [...((gs.hands||{})[targetId]||[])];
-  if(targetHand.length === 0){ showNotif('เขาไม่มีการ์ด!','error'); selectedCards=[]; renderHand(gs,true); return; }
-
-  // Remove selected cat pair from my hand
-  const sortedSel = [...selectedCards].sort((a,b)=>b-a);
-  const stolenCards = sortedSel.map(i=>hand[i]);
-  const newMyHand = hand.filter((_,i)=>!selectedCards.includes(i));
-  const newDiscard = [...(gs.discard||[]), ...stolenCards];
-
-  // Steal random card from target
-  const stealIdx = Math.floor(Math.random()*targetHand.length);
-  const stolen = targetHand.splice(stealIdx, 1)[0];
-  newMyHand.push(stolen);
-
-  selectedCards = [];
-  addLog(`😼 ${gs.players[myId]?.name} ขโมยการ์ดจาก ${gs.players[targetId]?.name}!`, 'lg-act');
-  showNotif(`ขโมย ${CARD_DEFS[stolen.id]?.name||'?'} มาแล้ว! 😼`,'success');
-  await update(ref(db,'rooms2/'+roomCode), {
-    [`hands/${myId}`]: newMyHand,
-    [`hands/${targetId}`]: targetHand,
-    discard: newDiscard
+async function endTurnTo(pid){
+  const order=gs.playerOrder||[];
+  const idx=order.indexOf(pid);
+  const next=idx>=0?idx:((gs.turnIdx||0)+1)%order.length;
+  await update(ref(db,'boss3/'+roomCode),{
+    phase:'move',turnIdx:next,curProj:null,bossId:null,
+    negoOffers:{},negoResponses:{},dealClosed:false,traveling:{},stolen:{}
   });
 }
 
-// ══════════════════════════════════════════
-// NOPE (any time)
-// ══════════════════════════════════════════
-// Simplified: nope button visible if someone just played a card
-// This is a complex real-time interaction; we implement it as a reaction button
+// ════════════════════════════════
+// CARD PLAY
+// ════════════════════════════════
+window.playCard=async()=>{
+  if(selIdx===null||!selCard)return;
+  const c=selCard;
 
-// ══════════════════════════════════════════
+  if(c.t==='boss'){await playBoss();}
+  else if(c.t==='stop'){await playStop();}
+  else if(c.t==='travel'){showTravelModal(c);}
+  else if(c.t==='recruit'){await playRecruit();}
+};
+
+async function playBoss(){
+  const hand=[...((gs.hands||{})[myId]||[])];
+  hand.splice(selIdx,1);
+  const dis=[...(gs.discard||[]),selCard];
+  await update(ref(db,'boss3/'+roomCode),{[`hands/${myId}`]:hand,discard:dis,bossId:myId});
+  addLog(`👑 ${gs.players[myId]?.name} ใช้การ์ด Boss! กลายเป็น Boss ทันที`,'lg');
+  clearSel_();
+}
+
+async function playStop(){
+  const hand=[...((gs.hands||{})[myId]||[])];
+  hand.splice(selIdx,1);
+  const dis=[...(gs.discard||[]),selCard];
+  // Undo last effect: revert traveling and stolen
+  await update(ref(db,'boss3/'+roomCode),{[`hands/${myId}`]:hand,discard:dis,traveling:{},stolen:{}});
+  addLog(`🛑 ${gs.players[myId]?.name} ใช้การ์ด Stop! ยกเลิกการกระทำล่าสุด`,'lb');
+  clearSel_();
+}
+
+function showTravelModal(card){
+  const proj=gs.curProj;if(!proj){showNotif('ไม่มีโครงการ','error');return;}
+  const ia=gs.ia||{};const container=gc('travel-opts');container.innerHTML='';
+  const allInv=[...(proj.inv||[]),...(proj.ch||[])];
+  const elig=allInv.filter(c=>{
+    if(card.c!=='wild'&&card.c!==c)return false;
+    const owner=ia[c];
+    return owner&&owner!=='table';
+  });
+  if(elig.length===0){showNotif('ไม่มีเป้าหมายที่ส่งได้','error');clearSel_();return;}
+  elig.forEach(c=>{
+    const owner=ia[c];const oName=(gs.players||{})[owner]?.name||'?';
+    const btn=document.createElement('button');
+    btn.className=`btn btn-out inv-tag c-${c} bc-${c} bg-${c}`;
+    btn.style.cssText='display:block;width:100%;margin-bottom:8px;';
+    btn.innerHTML=`${CEMOJI[COLORS.indexOf(c)]} ${CNAME[COLORS.indexOf(c)]} (ของ ${oName})`;
+    btn.onclick=async()=>{
+      const hand=[...((gs.hands||{})[myId]||[])];hand.splice(selIdx,1);
+      const dis=[...(gs.discard||[]),card];
+      const tr={...(gs.traveling||{})};tr[c]=true;
+      await update(ref(db,'boss3/'+roomCode),{[`hands/${myId}`]:hand,discard:dis,traveling:tr});
+      cm('m-travel');clearSel_();
+      addLog(`✈️ ${gs.players[myId]?.name} ส่ง ${CEMOJI[COLORS.indexOf(c)]} ${CNAME[COLORS.indexOf(c)]} ไปท่องเที่ยว!`,'lr');
+    };
+    container.appendChild(btn);
+  });
+  om('m-travel');
+}
+
+async function playRecruit(){
+  const hand=[...((gs.hands||{})[myId]||[])];
+  const recs=hand.filter(h=>h.t==='recruit');
+  if(recs.length<3){showNotif('ต้องมีการ์ด Recruit อย่างน้อย 3 ใบ!','error');clearSel_();return;}
+  // Show modal to pick target color
+  showRecruitModal();
+}
+
+function showRecruitModal(){
+  const ia=gs.ia||{};const container=gc('recruit-opts');container.innerHTML='';
+  COLORS.forEach(c=>{
+    const owner=ia[c];
+    if(!owner||owner===myId||owner==='table')return;
+    const oName=(gs.players||{})[owner]?.name||'?';
+    const btn=document.createElement('button');
+    btn.className=`btn btn-out inv-tag c-${c} bc-${c} bg-${c}`;
+    btn.style.cssText='display:block;width:100%;margin-bottom:8px;';
+    btn.innerHTML=`${CEMOJI[COLORS.indexOf(c)]} ${CNAME[COLORS.indexOf(c)]} (ของ ${oName})`;
+    btn.onclick=async()=>{
+      const hand=[...((gs.hands||{})[myId]||[])];
+      const recs=[];const rem=[];
+      hand.forEach(h=>{if(h.t==='recruit'&&recs.length<3)recs.push(h);else rem.push(h);});
+      const dis=[...(gs.discard||[]),...recs];
+      const st={...(gs.stolen||{})};st[c]=myId;
+      await update(ref(db,'boss3/'+roomCode),{[`hands/${myId}`]:rem,discard:dis,stolen:st});
+      cm('m-recruit');clearSel_();
+      addLog(`🤝 ${gs.players[myId]?.name} ขโมย ${CEMOJI[COLORS.indexOf(c)]} ${CNAME[COLORS.indexOf(c)]} (1 ตา)!`,'lb');
+    };
+    container.appendChild(btn);
+  });
+  if(container.innerHTML===''){showNotif('ไม่มีเป้าหมาย','error');clearSel_();return;}
+  om('m-recruit');
+}
+
+function clearSel_(){selIdx=null;selCard=null;if(gs)renderHand(gs);}
+
+// ════════════════════════════════
 // CHAT
-// ══════════════════════════════════════════
-window.sendChat = async () => {
-  const input = gc('chatinput'); const text = input.value.trim(); if(!text) return;
-  input.value = '';
-  const mr = push(ref(db,'rooms2/'+roomCode+'/chatMessages'));
-  await set(mr, { name:myName, text, ts:Date.now() });
+// ════════════════════════════════
+window.sendChat=async()=>{
+  const input=gc('chatinput');const text=input.value.trim();if(!text)return;
+  input.value='';
+  const mr=push(ref(db,'boss3/'+roomCode+'/chatMessages'));
+  await set(mr,{name:myName,text,ts:Date.now()});
 };
 function renderChat(d){
-  const msgs = d.chatMessages||{};
-  const box = gc('chatbox'); if(!box) return;
-  const arr = Object.values(msgs).sort((a,b)=>a.ts-b.ts);
-  box.innerHTML = '';
+  const msgs=d.chatMessages||{};const box=gc('chatbox');if(!box)return;
+  const arr=Object.values(msgs).sort((a,b)=>a.ts-b.ts);
+  box.innerHTML='';
   arr.forEach(m=>{
-    const div = document.createElement('div');
-    div.innerHTML = `<strong style="color:var(--pink)">${m.name}:</strong> ${m.text}`;
+    const div=document.createElement('div');
+    div.innerHTML=`<strong style="color:var(--gold2)">${m.name}:</strong> ${m.text}`;
     box.appendChild(div);
   });
-  box.scrollTop = box.scrollHeight;
+  box.scrollTop=box.scrollHeight;
 }
 
-// ══════════════════════════════════════════
+// ════════════════════════════════
 // RESULT
-// ══════════════════════════════════════════
+// ════════════════════════════════
 function renderResult(d){
   ss('result');
-  const players = Object.values(d.players||{});
-  const alive = d.alive||{};
-  const winner = d.winner ? d.players[d.winner] : players.find(p=>alive[p.id]);
-  gc('rtitle').textContent = winner?.id===myId ? '🏆 คุณชนะ!' : (winner?.name||'?')+' ชนะ!';
-  gc('rsub').textContent = 'ผู้เล่นที่รอดจากแมวระเบิดทั้งหมด!';
-  const ranks = gc('rranks'); ranks.innerHTML = '';
-  // Winner first, then others
-  const sorted = [...players].sort((a,b)=>{
-    if(a.id===winner?.id) return -1;
-    if(b.id===winner?.id) return 1;
-    return 0;
-  });
-  sorted.forEach((p,i)=>{
-    const isDead = alive[p.id]===false;
-    const row = document.createElement('div');
-    row.className = 'rank-row' + (i===0?' winner':'');
-    row.innerHTML = `<div style="display:flex;align-items:center;gap:9px"><span style="font-size:1.3rem">${i===0?'🏆':isDead?'💀':PLAYER_EMOJI[p.ci||0]}</span><span style="font-weight:700;color:${PLAYER_COLORS[p.ci||0]}">${p.name}${p.id===myId?' (คุณ)':''}</span></div><span style="font-size:.8rem;color:var(--muted)">${isDead&&p.id!==winner?.id?'💥 ระเบิด':'✨ รอด!'}</span>`;
-    ranks.appendChild(row);
-  });
+  const players=Object.values(d.players||{});
+  const scores=d.scores||{};
+  const sorted=[...players].sort((a,b)=>(scores[b.id]||0)-(scores[a.id]||0));
+  const winner=sorted[0];
+  gc('rtitle').textContent=winner?.id===myId?'🏆 คุณชนะ!':winner?.name+' ชนะ!';
+  gc('rsub').textContent='จบแล้ว 15 โครงการ!';
+  const medals=['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣'];
+  gc('rscores').innerHTML=sorted.map((p,i)=>{
+    const cc=COLORS[p.ci||0];
+    return `<div class="rank-row${i===0?' winner':''}">
+      <div style="display:flex;align-items:center;gap:9px">${medals[i]} <span class="dot dot-${cc}"></span>${p.name}${p.id===myId?' (คุณ)':''}</div>
+      <div style="font-family:'Bebas Neue',cursive;font-size:1.2rem;color:var(--gold2)">฿${(scores[p.id]||0).toLocaleString()}</div>
+    </div>`;
+  }).join('');
 }
 </script>
 </body>
